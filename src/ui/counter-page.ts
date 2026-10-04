@@ -6,7 +6,7 @@ import { colorSwatch, resultColumn, sizeRow, styleOption, switchRow } from './co
 import { renderLayout } from './layout.js';
 import { counterScript } from './scripts/counter.js';
 
-const DEFAULT_HANDLE = 'umt';
+const DEFAULT_HANDLE = 'umt0x';
 const SAMPLE_COUNT = 2026;
 
 /** Thumbnail for a style option. Uses a fixed number, so browsing styles never counts a visit. */

@@ -61,7 +61,7 @@ Add this to your README — replace `your-name` with any handle you like:
 ![Visitor count](https://odo.umt0x.workers.dev/@your-name)
 ```
 
-Every time the image loads, the count for `@your-name` goes up by one. Handles are case-insensitive (`@Umt` and `@umt` share a counter) and may use up to 39 letters, digits, `-` and `_`.
+Every time the image loads, the count for `@your-name` goes up by one. Handles are case-insensitive (`@Umt0x` and `@umt0x` share a counter) and may use up to 39 letters, digits, `-` and `_`.
 
 Prefer to click instead of type? Use [the builder](https://odo.umt0x.workers.dev/counter): pick a style, check the preview and copy the snippet. Want your own instance? See [Self-hosting](#self-hosting).
 
@@ -190,7 +190,7 @@ npm run typecheck        # type-check with tsc
 ### How it works
 
 ```
-GET /@umt?theme=led
+GET /@umt0x?theme=led
    │
    ├─ badge/options.ts      validate the handle and every option
    ├─ counter/              add a visit in the handle's Durable Object (skipped for render=true or num=)
