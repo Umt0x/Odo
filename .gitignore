@@ -1,0 +1,16 @@
+# Dependency directories
+node_modules/
+
+# Wrangler local state
+.wrangler/
+
+# Build outputs
+dist/
+
+# Environment files
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
