@@ -5,6 +5,7 @@ import {
   getProfile,
   getRecentlyPlayed,
   refreshAccessToken,
+  SpotifyError,
   type Credentials,
   type PlayableItem,
 } from './api.js';
@@ -83,6 +84,17 @@ export class SpotifyAccount {
   }
 
   private async connect(code: string, redirectUri: string): Promise<Response> {
+    try {
+      return await this.completeSignIn(code, redirectUri);
+    } catch (err) {
+      console.error('Spotify sign-in failed:', err);
+      // Tell the sign-in page why, so the owner can fix it (wrong secret, account not allowed...).
+      const step = err instanceof SpotifyError ? err.code ?? `status ${err.status}` : (err as Error).message;
+      return Response.json({ error: 'spotify', reason: step }, { status: 502 });
+    }
+  }
+
+  private async completeSignIn(code: string, redirectUri: string): Promise<Response> {
     const tokens = await exchangeCode(this.credentials(), code, redirectUri);
     const profile = await getProfile(tokens.access_token);
     if (!profile || !tokens.refresh_token) {

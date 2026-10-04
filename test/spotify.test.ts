@@ -78,6 +78,13 @@ describe('SpotifyAccount', () => {
     expect(storage.get('account')).toMatchObject({ userId: 'umt' });
   });
 
+  it('explains a rejected sign-in instead of crashing', async () => {
+    vi.stubGlobal('fetch', async () => Response.json({ error: 'invalid_client', error_description: 'Invalid client secret' }, { status: 400 }));
+    const res = await connect(new SpotifyAccount(fakeDurableState(), env));
+    expect(res.status).toBe(502);
+    expect(await res.json()).toEqual({ error: 'spotify', reason: 'invalid_client' });
+  });
+
   it('falls back to the last played track when nothing is playing', async () => {
     fakeSpotify({ playing: null, recent: { ...track, name: 'Wait' } });
     const account = new SpotifyAccount(fakeDurableState(), env);

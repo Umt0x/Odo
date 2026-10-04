@@ -40,11 +40,25 @@ export interface CurrentlyPlaying {
 }
 
 export class SpotifyError extends Error {
+  /** Spotify's short error code, e.g. `invalid_client` or `invalid_grant`, when it sent one. */
+  readonly code: string | undefined;
+
   constructor(
     readonly status: number,
     detail: string
   ) {
     super(`Spotify responded with ${status}: ${detail}`);
+    this.code = parseErrorCode(detail);
+  }
+}
+
+/** Token errors look like `{"error":"invalid_client"}`, Web API errors like `{"error":{"message":"..."}}`. */
+function parseErrorCode(detail: string): string | undefined {
+  try {
+    const { error } = JSON.parse(detail) as { error?: string | { message?: string } };
+    return typeof error === 'string' ? error : error?.message;
+  } catch {
+    return undefined;
   }
 }
 

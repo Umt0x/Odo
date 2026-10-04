@@ -66,15 +66,22 @@ export async function spotifyCallbackRoute(c: AppContext): Promise<Response> {
   const stub = account(c);
   if (!stub) return page(c, 'Spotify is not set up', 'The SPOTIFY binding is missing from this worker.', 503);
 
-  const res = await stub.fetch('https://spotify/connect', {
-    method: 'POST',
-    body: JSON.stringify({ code, redirectUri: callbackUrl(c) }),
-  });
+  let res: Response;
+  try {
+    res = await stub.fetch('https://spotify/connect', {
+      method: 'POST',
+      body: JSON.stringify({ code, redirectUri: callbackUrl(c) }),
+    });
+  } catch (err) {
+    console.error('Spotify account unavailable:', err);
+    return page(c, 'Could not connect', 'Something went wrong on our side. Try again from /spotify/login.', 502);
+  }
   if (res.status === 403) {
     return page(c, 'Already connected', 'This Odo is connected to a different Spotify account.', 403);
   }
   if (!res.ok) {
-    return page(c, 'Could not connect', 'Spotify did not accept the sign-in. Try again.', 502);
+    const { reason } = await res.json<{ reason?: string }>().catch(() => ({ reason: undefined }));
+    return page(c, 'Could not connect', `${explain(reason)} Then try again from <a href="/spotify/login">/spotify/login</a>.`, 502);
   }
 
   const { displayName } = await res.json<{ displayName: string }>();
@@ -85,6 +92,20 @@ export async function spotifyCallbackRoute(c: AppContext): Promise<Response> {
     `Connected as ${displayName}`,
     `Add this to your README:<pre>${escapeXml(snippet)}</pre><img src="/spotify" alt="Now playing" width="400">`
   );
+}
+
+/** Turns Spotify's error code into what the owner should do about it. */
+function explain(reason: string | undefined): string {
+  if (reason === 'invalid_client') {
+    return 'Spotify rejected the client secret. Copy the current one from the Spotify dashboard and save it again with <code>npx wrangler secret put SPOTIFY_CLIENT_SECRET</code>.';
+  }
+  if (reason === 'invalid_grant') {
+    return 'The sign-in code expired or was already used.';
+  }
+  if (reason && /registered|developer|user/i.test(reason)) {
+    return 'This Spotify account is not allowed to use the app yet. Add it under User Management in the Spotify dashboard.';
+  }
+  return `Spotify said: <code>${escapeXml(reason ?? 'unknown error')}</code>.`;
 }
 
 function callbackUrl(c: AppContext): string {
