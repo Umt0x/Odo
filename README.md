@@ -27,12 +27,12 @@ Flat pills or retro digit styles, counted atomically on Cloudflare's edge — an
 [![Cloudflare Workers](https://img.shields.io/badge/runs%20on-Cloudflare%20Workers-f38020?logo=cloudflare&logoColor=white)](https://workers.cloudflare.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)](tsconfig.json)
 
-**[Open the badge builder →](https://odo.umut-tr4552.workers.dev)**
+**[Open the badge builder →](https://odo.umt0x.workers.dev)**
 
 [Usage](#usage) · [Options](#options) · [Themes](#themes) · [Self-hosting](#self-hosting) · [Development](#development)
 
 <sub>This README has been viewed</sub><br>
-<a href="https://odo.umut-tr4552.workers.dev"><img src="https://odo.umut-tr4552.workers.dev/@umt0x-odo?theme=odometer&length=6" alt="Visitor count"></a>
+<a href="https://odo.umt0x.workers.dev"><img src="https://odo.umt0x.workers.dev/@umt0x-odo?theme=odometer&length=6" alt="Visitor count"></a>
 
 </div>
 
@@ -43,7 +43,7 @@ Flat pills or retro digit styles, counted atomically on Cloudflare's edge — an
 - **One line to add.** Paste a Markdown image into your README and you're done.
 - **Accurate.** Every handle gets its own Durable Object, so simultaneous visits are never lost.
 - **Five looks.** A minimal flat pill and four digit styles — pixel, LED, odometer and flip — all drawn in code and fully recolorable.
-- **Builder included.** Design your badge on [the builder](https://odo.umut-tr4552.workers.dev) and see it in a GitHub-style preview, light or dark.
+- **Builder included.** Design your badge on [the builder](https://odo.umt0x.workers.dev) and see it in a GitHub-style preview, light or dark.
 - **Safe to embed.** Every input is validated, and badges are served with a strict Content-Security-Policy.
 - **Free.** The Workers Free plan covers roughly 100k badge views a day.
 
@@ -52,12 +52,12 @@ Flat pills or retro digit styles, counted atomically on Cloudflare's edge — an
 Add this to your README — replace `your-name` with any handle you like:
 
 ```markdown
-![Visitor count](https://odo.umut-tr4552.workers.dev/@your-name)
+![Visitor count](https://odo.umt0x.workers.dev/@your-name)
 ```
 
 Every time the image loads, the count for `@your-name` goes up by one. Handles are case-insensitive (`@Umt` and `@umt` share a counter) and may use up to 39 letters, digits, `-` and `_`.
 
-Prefer to click instead of type? Use [the builder](https://odo.umut-tr4552.workers.dev): pick a style, check the preview and copy the snippet. Want your own instance? See [Self-hosting](#self-hosting).
+Prefer to click instead of type? Use [the builder](https://odo.umt0x.workers.dev): pick a style, check the preview and copy the snippet. Want your own instance? See [Self-hosting](#self-hosting).
 
 ## Options
 
@@ -106,7 +106,7 @@ Every theme is drawn in code: it stays sharp at any size and takes any colors vi
 | Flip | `flip` | <img src="docs/badges/flip.svg" alt="Flip"> |
 
 ```markdown
-![Visitor count](https://odo.umut-tr4552.workers.dev/@your-name?theme=led&length=5&color=00e5ff&bg=001018)
+![Visitor count](https://odo.umt0x.workers.dev/@your-name?theme=led&length=5&color=00e5ff&bg=001018)
 ```
 
 ## Self-hosting
