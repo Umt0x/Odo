@@ -61,7 +61,10 @@ describe('theme catalog', () => {
   }
 
   it('lists exactly the themes in src/assets', () => {
-    expect(SPRITE_THEMES.map((t) => t.id).sort()).toEqual(readdirSync(assets).sort());
+    const folders = readdirSync(assets, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name);
+    expect(SPRITE_THEMES.map((t) => t.id).sort()).toEqual(folders.sort());
   });
 
   it.each(SPRITE_THEMES.map((t) => [t.id, t] as const))('%s cell fits its widest and tallest digit', (id, theme) => {
