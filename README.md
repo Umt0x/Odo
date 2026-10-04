@@ -4,7 +4,7 @@
 
 **Visitor counter badges for your GitHub profile and website.**
 
-Flat pills, retro digit styles or baby dragons, counted atomically on Cloudflare's edge — and free to host.
+Flat pills, retro digit styles, or dragons, robots and aliens holding up your numbers — counted atomically on Cloudflare's edge and free to host.
 
 <br>
 
@@ -23,7 +23,7 @@ Flat pills, retro digit styles or baby dragons, counted atomically on Cloudflare
 
 <br><br>
 
-<img src="src/assets/hatchling/2.png" height="72" alt="2"><img src="src/assets/hatchling/0.png" height="72" alt="0"><img src="src/assets/hatchling/2.png" height="72" alt="2"><img src="src/assets/hatchling/6.png" height="72" alt="6">
+<img src="src/assets/umt0x-th-first-ten/2.png" height="72" alt="2"><img src="src/assets/umt0x-th-first-ten/0.png" height="72" alt="0"><img src="src/assets/umt0x-th-first-ten/2.png" height="72" alt="2"><img src="src/assets/umt0x-th-first-ten/6.png" height="72" alt="6">
 
 <br><br>
 
@@ -46,7 +46,7 @@ Flat pills, retro digit styles or baby dragons, counted atomically on Cloudflare
 
 - **One line to add.** Paste a Markdown image into your README and you're done.
 - **Accurate.** Every handle gets its own Durable Object, so simultaneous visits are never lost.
-- **Six looks.** A minimal flat pill, four recolorable digit styles drawn in code — pixel, LED, odometer and flip — and the Hatchlings, ten baby dragons that each hold up a digit.
+- **Eight looks.** A minimal flat pill, four recolorable digit styles drawn in code — pixel, LED, odometer and flip — and three original character sets: baby dragons, robots and aliens.
 - **Builder included.** Design your badge on [the builder](https://odo.umt0x.workers.dev) and see it in a GitHub-style preview, light or dark.
 - **Safe to embed.** Every input is validated, and badges are served with a strict Content-Security-Policy.
 - **Free.** The Workers Free plan covers roughly 100k badge views a day.
@@ -95,7 +95,7 @@ Large numbers are shortened automatically: `1337` → `1.3K`, `1250000` → `1.3
 | `length` | Minimum number of digits, `1` – `16`; shorter counts are padded with zeros | `7` |
 | `color` | Digit color — drawn themes only | per theme |
 | `bg` | Background color, or `transparent` — drawn themes only | per theme |
-| `pixelated` | `0` turns off crisp scaling — Hatchlings only | on |
+| `pixelated` | `0` turns off crisp scaling — character themes only | on |
 
 ## Themes
 
@@ -116,16 +116,18 @@ Drawn in code: they stay sharp at any size and take any colors via `color` and `
 ![Visitor count](https://odo.umt0x.workers.dev/@your-name?theme=led&length=5&color=00e5ff&bg=001018)
 ```
 
-### Hatchlings
+### Characters
 
-Ten baby dragons — shadow, bone, panda, tabby, sand, lavender, forest, fire, ice and coral — each holding up its own digit.
+Original pixel-art sets by Umt0x: every digit is its own character holding up its number.
 
-| Theme | `theme=` | Preview |
+| Theme | `theme=` | Digits 0–9 |
 | :--- | :--- | :--- |
-| Hatchlings | `hatchling` | <img src="src/assets/hatchling/0.png" height="54"><img src="src/assets/hatchling/1.png" height="54"><img src="src/assets/hatchling/2.png" height="54"><img src="src/assets/hatchling/3.png" height="54"><img src="src/assets/hatchling/4.png" height="54"><img src="src/assets/hatchling/5.png" height="54"><img src="src/assets/hatchling/6.png" height="54"><img src="src/assets/hatchling/7.png" height="54"><img src="src/assets/hatchling/8.png" height="54"><img src="src/assets/hatchling/9.png" height="54"> |
+| Umt0x: The First Ten | `first-ten` | <img src="src/assets/umt0x-th-first-ten/0.png" height="54"><img src="src/assets/umt0x-th-first-ten/1.png" height="54"><img src="src/assets/umt0x-th-first-ten/2.png" height="54"><img src="src/assets/umt0x-th-first-ten/3.png" height="54"><img src="src/assets/umt0x-th-first-ten/4.png" height="54"><img src="src/assets/umt0x-th-first-ten/5.png" height="54"><img src="src/assets/umt0x-th-first-ten/6.png" height="54"><img src="src/assets/umt0x-th-first-ten/7.png" height="54"><img src="src/assets/umt0x-th-first-ten/8.png" height="54"><img src="src/assets/umt0x-th-first-ten/9.png" height="54"> |
+| Umt0x: First Boot | `first-boot` | <img src="src/assets/umt0x-first-boot/0.png" height="54"><img src="src/assets/umt0x-first-boot/1.png" height="54"><img src="src/assets/umt0x-first-boot/2.png" height="54"><img src="src/assets/umt0x-first-boot/3.png" height="54"><img src="src/assets/umt0x-first-boot/4.png" height="54"><img src="src/assets/umt0x-first-boot/5.png" height="54"><img src="src/assets/umt0x-first-boot/6.png" height="54"><img src="src/assets/umt0x-first-boot/7.png" height="54"><img src="src/assets/umt0x-first-boot/8.png" height="54"><img src="src/assets/umt0x-first-boot/9.png" height="54"> |
+| Umt0x: Aliens | `aliens` | <img src="src/assets/umt0x-aliens-0-9/0.png" height="54"><img src="src/assets/umt0x-aliens-0-9/1.png" height="54"><img src="src/assets/umt0x-aliens-0-9/2.png" height="54"><img src="src/assets/umt0x-aliens-0-9/3.png" height="54"><img src="src/assets/umt0x-aliens-0-9/4.png" height="54"><img src="src/assets/umt0x-aliens-0-9/5.png" height="54"><img src="src/assets/umt0x-aliens-0-9/6.png" height="54"><img src="src/assets/umt0x-aliens-0-9/7.png" height="54"><img src="src/assets/umt0x-aliens-0-9/8.png" height="54"><img src="src/assets/umt0x-aliens-0-9/9.png" height="54"> |
 
 ```markdown
-![Visitor count](https://odo.umt0x.workers.dev/@your-name?theme=hatchling&length=5)
+![Visitor count](https://odo.umt0x.workers.dev/@your-name?theme=first-ten&length=5)
 ```
 
 ## Self-hosting
@@ -162,7 +164,7 @@ GET /@umt?theme=led
    ├─ counter/              add a visit in the handle's Durable Object (skipped for render=true or num=)
    ├─ badge/flat.ts         draw the flat pill, or
    │  badge/glyph.ts        draw pixel / LED / odometer / flip digits, or
-   │  badge/sprite.ts       lay out the Hatchlings images bundled with the worker
+   │  badge/sprite.ts       lay out character images bundled with the worker
    └─ routes/badge.ts       return the SVG with no-store and CSP headers
 ```
 
@@ -179,14 +181,14 @@ src/
 ├── themes/catalog.ts    Every theme: ids, labels, colors and image sets
 ├── ui/                  Builder page: markup, styles and browser script
 ├── lib/                 Escaping and other text helpers
-└── assets/              Sprite images (bundled into the worker)
+└── assets/              Character images (bundled into the worker)
 test/                    Vitest suites
 ```
 
 ### Adding a theme
 
 - **Drawn:** add a drawing function to `src/badge/glyph.ts`, register it in `DRAWERS` and in `src/themes/catalog.ts` with a label and default colors.
-- **Images:** put `0.png` … `9.png` in `src/assets/<id>/` with an `index.ts` like `hatchling`'s, and register the set in `src/themes/catalog.ts`. Keep each image small (around 10 KB): every digit is embedded in the badge.
+- **Characters:** put `0.png` … `9.png` in a folder under `src/assets/` with an `index.ts` like the existing ones, and register the set in `src/themes/catalog.ts`. Keep each image small (around 10 KB): every digit is embedded in the badge.
 
 `npm test` checks that every theme renders and that image cell sizes match the files.
 

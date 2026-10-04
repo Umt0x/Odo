@@ -77,7 +77,7 @@ describe('GET /@:handle', () => {
   });
 
   it('serves sprite themes from bundled images', async () => {
-    const svg = await (await app.request('/@sprite-user?theme=hatchling&length=4&num=2026')).text();
+    const svg = await (await app.request('/@sprite-user?theme=first-ten&length=4&num=2026')).text();
     expect(svg.match(/<image /g)).toHaveLength(4);
     expect(svg).toContain('href="data:image/png;base64,');
   });

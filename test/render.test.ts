@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { renderFlatBadge } from '../src/badge/flat.js';
 import { renderGlyphBadge } from '../src/badge/glyph.js';
-import { readFileSync } from 'node:fs';
 import { FLAT_COLORS, type FlatStyle, type GlyphStyle } from '../src/badge/options.js';
 import { renderSpriteBadge } from '../src/badge/sprite.js';
 import { GLYPH_THEMES, SPRITE_THEMES, findTheme, type GlyphTheme } from '../src/themes/catalog.js';
@@ -65,19 +64,20 @@ describe('glyph badges', () => {
 });
 
 describe('sprite badges', () => {
-  const [hatchling] = SPRITE_THEMES;
+  const [firstTen] = SPRITE_THEMES;
 
   it('pads the count and uses each digit image', () => {
-    const svg = renderSpriteBadge(11, { kind: 'sprite', theme: hatchling, digits: 7, pixelated: true }, 1);
+    const svg = renderSpriteBadge(11, { kind: 'sprite', theme: firstTen, digits: 7, pixelated: true }, 1);
     expect(svg.match(/<image /g)).toHaveLength(7);
-    expect(svg).toContain(`viewBox="0 0 ${hatchling.cell.width * 7} ${hatchling.cell.height}"`);
+    expect(svg).toContain(`viewBox="0 0 ${firstTen.cell.width * 7} ${firstTen.cell.height}"`);
     expect(new Set(svg.match(/href="[^"]+"/g)).size).toBe(2);
   });
 
-  it.each(SPRITE_THEMES.map((t) => [t.id, t] as const))('%s cell fits its widest and tallest image', (id, theme) => {
-    const sizes = Array.from({ length: 10 }, (_, digit) => {
-      const png = readFileSync(new URL(`../src/assets/${id}/${digit}.png`, import.meta.url));
-      return [png.readUInt32BE(16), png.readUInt32BE(20)];
+  it.each(SPRITE_THEMES.map((t) => [t.id, t] as const))('%s has ten PNGs and a cell that fits them', (_id, theme) => {
+    // Width and height sit at bytes 16-23 of a PNG header.
+    const sizes = theme.images.map((image) => {
+      const header = new DataView(image);
+      return [header.getUint32(16), header.getUint32(20)];
     });
     expect(theme.images).toHaveLength(10);
     expect(theme.cell).toEqual({

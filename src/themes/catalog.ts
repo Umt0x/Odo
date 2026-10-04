@@ -1,4 +1,6 @@
-import hatchlingDigits from '../assets/hatchling/index.js';
+import aliensDigits from '../assets/umt0x-aliens-0-9/index.js';
+import firstBootDigits from '../assets/umt0x-first-boot/index.js';
+import firstTenDigits from '../assets/umt0x-th-first-ten/index.js';
 
 export type GlyphId = 'pixel' | 'led' | 'odometer' | 'flip';
 
@@ -31,12 +33,14 @@ export const GLYPH_THEMES: readonly GlyphTheme[] = [
 ];
 
 /**
- * Image themes. To add one: put `0.png` … `9.png` in `src/assets/<id>/` with an
- * `index.ts` like the existing one, and register it here. The test suite checks
+ * Image themes. To add one: put `0.png` … `9.png` in a folder under `src/assets/`
+ * with an `index.ts` like the existing ones, and register it here. The test suite checks
  * that the cell size matches the images.
  */
 export const SPRITE_THEMES: readonly SpriteTheme[] = [
-  { kind: 'sprite', id: 'hatchling', label: 'Hatchlings', cell: { width: 125, height: 180 }, images: hatchlingDigits },
+  { kind: 'sprite', id: 'first-ten', label: 'The First Ten', cell: { width: 125, height: 180 }, images: firstTenDigits },
+  { kind: 'sprite', id: 'first-boot', label: 'First Boot', cell: { width: 133, height: 180 }, images: firstBootDigits },
+  { kind: 'sprite', id: 'aliens', label: 'Aliens', cell: { width: 135, height: 180 }, images: aliensDigits },
 ];
 
 /** Every value the `theme` parameter accepts besides `flat`, in the order the builder shows them. */

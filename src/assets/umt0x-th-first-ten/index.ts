@@ -9,5 +9,5 @@ import d7 from './7.png';
 import d8 from './8.png';
 import d9 from './9.png';
 
-/** The Hatchlings digits 0–9, in order: one baby dragon holding up each number. */
+/** Umt0x: The First Ten — digits 0–9, in order: one baby dragon holding up each number. */
 export default [d0, d1, d2, d3, d4, d5, d6, d7, d8, d9];

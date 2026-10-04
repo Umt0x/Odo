@@ -14,3 +14,6 @@ dist/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Full-size originals of the sprite art (the worker uses the small copies in src/assets)
+art/
