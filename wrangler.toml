@@ -12,6 +12,20 @@ class_name = "VisitCounter"
 tag = "v1"
 new_sqlite_classes = ["VisitCounter"]
 
+# The connected Spotify account behind /spotify
+[[durable_objects.bindings]]
+name = "SPOTIFY"
+class_name = "SpotifyAccount"
+
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["SpotifyAccount"]
+
+# Client ID from developer.spotify.com/dashboard (not secret). The client secret
+# goes in with `npx wrangler secret put SPOTIFY_CLIENT_SECRET`.
+[vars]
+SPOTIFY_CLIENT_ID = ""
+
 # Sprite images ship inside the worker as binary data
 [[rules]]
 type = "Data"

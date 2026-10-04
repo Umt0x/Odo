@@ -5,12 +5,7 @@ import { parseBadgeRequest } from '../badge/options.js';
 import { ERROR_BADGE } from '../badge/svg.js';
 import { countVisit } from '../counter/counter-client.js';
 import type { AppContext } from '../env.js';
-
-/** Badges are opened directly by browsers too; this keeps any SVG from running scripts or loading remote content. */
-const SVG_CSP = "default-src 'none'; style-src 'unsafe-inline'; img-src data:";
-
-/** Read-only badges may be served from the edge cache for this long. */
-const EDGE_CACHE_SECONDS = 5;
+import { svgResponse } from '../lib/http.js';
 
 /** GET /@:handle — counts a visit (unless `render=true`) and returns the badge. */
 export async function badgeRoute(c: AppContext): Promise<Response> {
@@ -55,19 +50,4 @@ export async function badgeRoute(c: AppContext): Promise<Response> {
     c.executionCtx.waitUntil(edgeCache.put(cacheKey, response.clone()));
   }
   return response;
-}
-
-function svgResponse(body: string, { status = 200, edgeCacheable = false } = {}): Response {
-  return new Response(body, {
-    status,
-    headers: {
-      'Content-Type': 'image/svg+xml; charset=utf-8',
-      'Content-Security-Policy': SVG_CSP,
-      // Counting badges must not be cached anywhere (GitHub's image proxy included),
-      // otherwise visits would stop registering.
-      'Cache-Control': edgeCacheable
-        ? `public, max-age=0, s-maxage=${EDGE_CACHE_SECONDS}`
-        : 'no-cache, no-store, must-revalidate',
-    },
-  });
 }

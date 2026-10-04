@@ -33,7 +33,7 @@ Flat pills, retro digit styles, or dragons, robots and aliens holding up your nu
 
 **[Open the badge builder →](https://odo.umt0x.workers.dev)**
 
-[Usage](#usage) · [Options](#options) · [Themes](#themes) · [Self-hosting](#self-hosting) · [Development](#development)
+[Usage](#usage) · [Options](#options) · [Themes](#themes) · [Spotify](#spotify-now-playing) · [Self-hosting](#self-hosting) · [Development](#development)
 
 <sub>This README has been viewed</sub><br>
 <a href="https://odo.umt0x.workers.dev"><img src="https://odo.umt0x.workers.dev/@umt0x-odo?theme=odometer&length=6" alt="Visitor count"></a>
@@ -48,6 +48,7 @@ Flat pills, retro digit styles, or dragons, robots and aliens holding up your nu
 - **Accurate.** Every handle gets its own Durable Object, so simultaneous visits are never lost.
 - **Eight looks.** A minimal flat pill, four recolorable digit styles drawn in code — pixel, LED, odometer and flip — and three original character sets: baby dragons, robots and aliens.
 - **Builder included.** Design your badge on [the builder](https://odo.umt0x.workers.dev) and see it in a GitHub-style preview, light or dark.
+- **Spotify card.** Show what you're listening to right now, with cover art and a live progress bar.
 - **Safe to embed.** Every input is validated, and badges are served with a strict Content-Security-Policy.
 - **Free.** The Workers Free plan covers roughly 100k badge views a day.
 
@@ -130,6 +131,25 @@ Original pixel-art sets by Umt0x: every digit is its own character holding up it
 ![Visitor count](https://odo.umt0x.workers.dev/@your-name?theme=first-ten&length=5)
 ```
 
+## Spotify now playing
+
+A card with the song you're playing on Spotify right now — or the last one you played — with its cover art and a progress bar that keeps moving.
+
+```markdown
+[![Spotify](https://odo.umt0x.workers.dev/spotify)](https://odo.umt0x.workers.dev/spotify/open)
+```
+
+Add `?mode=light` for light backgrounds. `/spotify/open` takes visitors straight to the song on the card.
+
+Each Odo deployment shows **one** Spotify account: its owner's. Spotify only lets new apps sign in up to 25 hand-picked users, so the card is built for your own profile rather than as a shared service.
+
+### Connecting your account
+
+1. Create an app at [developer.spotify.com/dashboard](https://developer.spotify.com/dashboard) with the redirect URI `https://<your-worker>/spotify/callback` and the Web API enabled.
+2. Put its client ID in `wrangler.toml` (`SPOTIFY_CLIENT_ID`) and deploy.
+3. Store the client secret: `npx wrangler secret put SPOTIFY_CLIENT_SECRET`.
+4. Open `https://<your-worker>/spotify/login` and sign in. After that, only the same Spotify account can reconnect.
+
 ## Self-hosting
 
 odo runs on your own Cloudflare account. You need [Node.js](https://nodejs.org) 18+ and a free [Cloudflare](https://dash.cloudflare.com/sign-up) account.
@@ -178,6 +198,7 @@ src/
 ├── routes/              One handler per route: badge, themes, builder page
 ├── badge/               Option parsing and the flat, drawn and sprite renderers
 ├── counter/             VisitCounter Durable Object and its client
+├── spotify/             Spotify API client, account Durable Object and card
 ├── themes/catalog.ts    Every theme: ids, labels, colors and image sets
 ├── ui/                  Builder page: markup, styles and browser script
 ├── lib/                 Escaping and other text helpers

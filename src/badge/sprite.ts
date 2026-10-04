@@ -1,3 +1,4 @@
+import { toBase64 } from '../lib/base64.js';
 import type { SpriteStyle } from './options.js';
 import { svgDocument } from './svg.js';
 
@@ -11,14 +12,6 @@ function dataUri(image: ArrayBuffer): string {
     dataUris.set(image, uri);
   }
   return uri;
-}
-
-function toBase64(bytes: Uint8Array): string {
-  let binary = '';
-  for (let i = 0; i < bytes.length; i += 0x8000) {
-    binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
-  }
-  return btoa(binary);
 }
 
 /** Lays the count out as a row of digit images, one fixed-size cell per digit. */
