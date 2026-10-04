@@ -227,3 +227,10 @@ describe('every card style', () => {
     expect(toPixelText('夜に駆ける (YOASOBI)')).toBe('? (YOASOBI)');
   });
 });
+
+describe('Spotify card caching', () => {
+  it('tells shared caches like GitHub camo not to keep the card', async () => {
+    const res = await app.request('/spotify');
+    expect(res.headers.get('Cache-Control')).toMatch(/(^|, )max-age=0, s-maxage=0/);
+  });
+});

@@ -67,6 +67,8 @@ describe('GET /@:handle', () => {
     expect(first.status).toBe(200);
     expect(first.headers.get('Content-Type')).toContain('image/svg+xml');
     expect(first.headers.get('Content-Security-Policy')).toContain("default-src 'none'");
+    // GitHub's image proxy keeps caching unless it sees an explicit zero max-age.
+    expect(first.headers.get('Cache-Control')).toMatch(/(^|, )max-age=0, s-maxage=0/);
     expect(first.headers.get('Cache-Control')).toContain('no-store');
     expect(badgeText(await first.text())).toBe('1');
 
