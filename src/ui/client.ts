@@ -11,6 +11,9 @@ export const clientScript = String.raw`
   var fields = form.elements;
   var stageImage = document.getElementById('stage-badge');
   var stageHandle = document.getElementById('stage-handle');
+  var stageName = document.getElementById('stage-name');
+  var preview = document.querySelector('.preview');
+  var surfaceButtons = Array.prototype.slice.call(document.querySelectorAll('[data-surface-option]'));
   var code = document.getElementById('embed-code');
   var copyButton = document.getElementById('copy');
   var scaleOutput = document.getElementById('scale-out');
@@ -93,7 +96,8 @@ export const clientScript = String.raw`
     // The preview must not count as a visit.
     params.set('render', 'true');
     stageImage.src = badgeUrl(params);
-    stageHandle.textContent = '@' + handle();
+    stageHandle.textContent = handle();
+    stageName.textContent = handle();
     form.dataset.mode = selectedTheme().dataset.kind;
   }
 
@@ -168,6 +172,21 @@ export const clientScript = String.raw`
     }
   });
 
+  // The preview mimics a GitHub README; let people check the badge on both of its backgrounds.
+  function setSurface(name) {
+    preview.dataset.surface = name;
+    surfaceButtons.forEach(function (button) {
+      button.setAttribute('aria-pressed', String(button.dataset.surfaceOption === name));
+    });
+  }
+
+  surfaceButtons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      setSurface(button.dataset.surfaceOption);
+    });
+  });
+
+  setSurface(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   syncOutputs();
   render();
 })();
