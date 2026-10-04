@@ -31,7 +31,7 @@ Flat pills, retro digit styles, or dragons, robots and aliens holding up your nu
 [![Cloudflare Workers](https://img.shields.io/badge/runs%20on-Cloudflare%20Workers-f38020?logo=cloudflare&logoColor=white)](https://workers.cloudflare.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)](tsconfig.json)
 
-**[Open the badge builder →](https://odo.umt0x.workers.dev)**
+**[Open Odo →](https://odo.umt0x.workers.dev)** · [Visitor counter builder](https://odo.umt0x.workers.dev/counter) · [Spotify card builder](https://odo.umt0x.workers.dev/now-playing)
 
 [Usage](#usage) · [Options](#options) · [Themes](#themes) · [Spotify](#spotify-now-playing) · [Self-hosting](#self-hosting) · [Development](#development)
 
@@ -47,7 +47,8 @@ Flat pills, retro digit styles, or dragons, robots and aliens holding up your nu
 - **One line to add.** Paste a Markdown image into your README and you're done.
 - **Accurate.** Every handle gets its own Durable Object, so simultaneous visits are never lost.
 - **Eight looks.** A minimal flat pill, four recolorable digit styles drawn in code — pixel, LED, odometer and flip — and three original character sets: baby dragons, robots and aliens.
-- **Builder included.** Design your badge on [the builder](https://odo.umt0x.workers.dev) and see it in a GitHub-style preview, light or dark.
+- **Builders included.** Design your badge or Spotify card on the site and see it in a GitHub-style preview, light or dark.
+- **18 languages.** The site follows your browser's language, with a picker in the footer.
 - **Spotify card.** Show what you're listening to right now, with cover art and a live progress bar.
 - **Safe to embed.** Every input is validated, and badges are served with a strict Content-Security-Policy.
 - **Free.** The Workers Free plan covers roughly 100k badge views a day.
@@ -62,7 +63,7 @@ Add this to your README — replace `your-name` with any handle you like:
 
 Every time the image loads, the count for `@your-name` goes up by one. Handles are case-insensitive (`@Umt` and `@umt` share a counter) and may use up to 39 letters, digits, `-` and `_`.
 
-Prefer to click instead of type? Use [the builder](https://odo.umt0x.workers.dev): pick a style, check the preview and copy the snippet. Want your own instance? See [Self-hosting](#self-hosting).
+Prefer to click instead of type? Use [the builder](https://odo.umt0x.workers.dev/counter): pick a style, check the preview and copy the snippet. Want your own instance? See [Self-hosting](#self-hosting).
 
 ## Options
 
@@ -139,7 +140,18 @@ A card with the song you're playing on Spotify right now — or the last one you
 [![Spotify](https://odo.umt0x.workers.dev/spotify)](https://odo.umt0x.workers.dev/spotify/open)
 ```
 
-Add `?mode=light` for light backgrounds. `/spotify/open` takes visitors straight to the song on the card.
+Design it on [the Spotify card builder](https://odo.umt0x.workers.dev/now-playing), or set the options yourself:
+
+| Option | Description | Default |
+| :--- | :--- | :--- |
+| `style` | `card`, `compact` (one slim line) or `vinyl` (a record that spins while the song plays) | `card` |
+| `mode` | `dark` or `light` | `dark` |
+| `bg`, `color`, `accent` | Background, text and accent colors (hex without `#` or a CSS color name) | per mode, accent `1db954` |
+| `cover` | `0` hides the cover art | shown |
+| `progress` | `0` hides the progress bar | shown |
+| `scale` | Display size multiplier, `0.1` – `10` | `1` |
+
+`/spotify/open` takes visitors straight to the song on the card.
 
 Each Odo deployment shows **one** Spotify account: its owner's. Spotify only lets new apps sign in up to 25 hand-picked users, so the card is built for your own profile rather than as a shared service.
 
@@ -195,16 +207,21 @@ src/
 ├── index.ts             Worker entry: exports the app and the Durable Object
 ├── app.ts               Route table
 ├── env.ts               Cloudflare bindings
-├── routes/              One handler per route: badge, themes, builder page
+├── routes/              Route handlers: badges, Spotify, pages (with language selection)
 ├── badge/               Option parsing and the flat, drawn and sprite renderers
 ├── counter/             VisitCounter Durable Object and its client
 ├── spotify/             Spotify API client, account Durable Object and card
 ├── themes/catalog.ts    Every theme: ids, labels, colors and image sets
-├── ui/                  Builder page: markup, styles and browser script
+├── ui/                  Landing page, builders, shared layout, styles and browser scripts
+├── i18n/                UI strings: en.ts is the source, locales/ has the translations
 ├── lib/                 Escaping and other text helpers
 └── assets/              Character images (bundled into the worker)
 test/                    Vitest suites
 ```
+
+### Adding a language
+
+Copy `src/i18n/locales/tr.ts`, translate the strings and add the language to `LOCALES` in `src/i18n/index.ts`. `npm test` checks that every string is translated.
 
 ### Adding a theme
 

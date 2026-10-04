@@ -3,18 +3,54 @@ import { app } from '../src/app.js';
 import { DIGIT_THEMES } from '../src/themes/catalog.js';
 import { badgeText } from './helpers.js';
 
-describe('GET /', () => {
-  it('serves the builder with every theme', async () => {
+describe('pages', () => {
+  it('serves the landing page with links to every tool', async () => {
     const res = await app.request('/');
     expect(res.status).toBe(200);
     expect(res.headers.get('Content-Type')).toContain('text/html');
 
     const html = await res.text();
+    expect(html).toContain('class="wordmark"');
+    expect(html).toContain('href="/counter"');
+    expect(html).toContain('href="/now-playing"');
+    expect(html).toContain('href="https://github.com/Umt0x"');
+  });
+
+  it('serves the counter builder with every theme', async () => {
+    const html = await (await app.request('/counter')).text();
     expect(html).toContain('<title>Odo');
-    expect(html).toContain('Umt');
+    expect(html).toMatch(/href="\/counter" aria-current="page"/);
     for (const theme of DIGIT_THEMES) {
       expect(html, theme.id).toContain(`name="theme" value="${theme.id}"`);
     }
+  });
+
+  it('serves the Spotify builder without a connected account', async () => {
+    const html = await (await app.request('/now-playing')).text();
+    expect(html).toMatch(/href="\/now-playing" aria-current="page"/);
+    expect(html).toContain('name="style" value="vinyl"');
+  });
+
+  it('picks the language from Accept-Language', async () => {
+    const res = await app.request('/counter', { headers: { 'Accept-Language': 'tr-TR,tr;q=0.9,en;q=0.8' } });
+    const html = await res.text();
+    expect(html).toContain('<html lang="tr"');
+    expect(html).toContain('Ziyaretçi sayacı');
+  });
+
+  it('remembers ?lang= in a cookie and redirects to the clean URL', async () => {
+    const res = await app.request('/counter?lang=ja');
+    expect(res.status).toBe(302);
+    expect(res.headers.get('Location')).toBe('/counter');
+    expect(res.headers.get('Set-Cookie')).toContain('odo_lang=ja');
+
+    const html = await (await app.request('/counter', { headers: { Cookie: 'odo_lang=ja' } })).text();
+    expect(html).toContain('<html lang="ja"');
+  });
+
+  it('marks right-to-left languages', async () => {
+    const html = await (await app.request('/', { headers: { Cookie: 'odo_lang=ar' } })).text();
+    expect(html).toContain('<html lang="ar" dir="rtl"');
   });
 });
 

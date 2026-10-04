@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { app } from '../src/app.js';
-import { renderSpotifyCard } from '../src/spotify/card.js';
+import { parseCardOptions, renderSpotifyCard } from '../src/spotify/card.js';
 import { SpotifyAccount, type NowPlaying } from '../src/spotify/spotify-account.js';
 import { fakeDurableState } from './helpers.js';
 
@@ -119,7 +119,7 @@ describe('Spotify card', () => {
   };
 
   it('escapes and shortens the title and animates while playing', () => {
-    const svg = renderSpotifyCard(playing, 'dark');
+    const svg = renderSpotifyCard(playing, parseCardOptions(() => undefined));
     expect(svg).toContain('A &lt;very&gt; long title');
     expect(svg).toContain('…');
     expect(svg).not.toContain('<very>');
@@ -127,7 +127,34 @@ describe('Spotify card', () => {
   });
 
   it('shows a message when there is nothing to show', () => {
-    expect(renderSpotifyCard({ state: 'disconnected' }, 'light')).toContain('Spotify is not connected yet');
+    const light = parseCardOptions((name) => (name === 'mode' ? 'light' : undefined));
+    expect(renderSpotifyCard({ state: 'disconnected' }, light)).toContain('Spotify is not connected yet');
+  });
+
+  it('reads style, colors and toggles from the query', () => {
+    const query: Record<string, string> = { style: 'vinyl', bg: '000000', accent: 'ff0000', cover: '0', progress: '0', scale: '2' };
+    const options = parseCardOptions((name) => query[name]);
+    expect(options).toMatchObject({ style: 'vinyl', background: '#000000', accent: '#ff0000', showCover: false, showProgress: false, scale: 2 });
+
+    const svg = renderSpotifyCard(playing, options);
+    expect(svg).toContain('animation:spin');
+    expect(svg).toContain('fill="#000000"');
+    expect(svg).not.toContain('class="accent progress"');
+  });
+
+  it('draws a compact pill that grows with the title', () => {
+    const compact = parseCardOptions((name) => (name === 'style' ? 'compact' : undefined));
+    const short = renderSpotifyCard({ ...playing, title: 'Hi' }, compact);
+    const long = renderSpotifyCard(playing, compact);
+    const width = (svg: string) => Number(svg.match(/viewBox="0 0 ([\d.]+)/)![1]);
+    expect(width(long)).toBeGreaterThan(width(short));
+  });
+
+  it('ignores unknown styles and unsafe colors', () => {
+    const query: Record<string, string> = { style: 'nope', color: 'red" onload="x' };
+    const options = parseCardOptions((name) => query[name]);
+    expect(options.style).toBe('card');
+    expect(options.foreground).toBe('#fafafa');
   });
 });
 

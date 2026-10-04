@@ -74,6 +74,9 @@ export class SpotifyAccount {
     if (pathname === '/now-playing') {
       return Response.json(await this.nowPlaying());
     }
+    if (pathname === '/profile') {
+      return Response.json({ displayName: this.account?.displayName ?? null });
+    }
     return new Response('Not found', { status: 404 });
   }
 

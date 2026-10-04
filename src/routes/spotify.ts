@@ -3,7 +3,7 @@ import type { AppContext } from '../env.js';
 import { svgResponse } from '../lib/http.js';
 import { escapeXml } from '../lib/text.js';
 import { authorizeUrl } from '../spotify/api.js';
-import { renderSpotifyCard, type CardMode } from '../spotify/card.js';
+import { parseCardOptions, renderSpotifyCard } from '../spotify/card.js';
 import type { NowPlaying } from '../spotify/spotify-account.js';
 
 const STATE_COOKIE = 'odo_spotify_state';
@@ -26,10 +26,13 @@ async function nowPlaying(c: AppContext): Promise<NowPlaying> {
   }
 }
 
-/** GET /spotify — the "now playing" card. `mode=light` for light backgrounds. */
+/**
+ * GET /spotify — the "now playing" card. Options: `style` (card, compact, vinyl),
+ * `mode` (dark, light), `bg`, `color`, `accent`, `cover=0`, `progress=0`, `scale`.
+ */
 export async function spotifyCardRoute(c: AppContext): Promise<Response> {
-  const mode: CardMode = c.req.query('mode') === 'light' ? 'light' : 'dark';
-  return svgResponse(renderSpotifyCard(await nowPlaying(c), mode));
+  const options = parseCardOptions((name) => c.req.query(name));
+  return svgResponse(renderSpotifyCard(await nowPlaying(c), options));
 }
 
 /** GET /spotify/open — redirects to the song on the card, so the card can be a link. */
@@ -90,7 +93,7 @@ export async function spotifyCallbackRoute(c: AppContext): Promise<Response> {
   return page(
     c,
     `Connected as ${displayName}`,
-    `Add this to your README:<pre>${escapeXml(snippet)}</pre><img src="/spotify" alt="Now playing" width="400">`
+    `Add this to your README, or <a href="/now-playing">customize the card first</a>:<pre>${escapeXml(snippet)}</pre><img src="/spotify" alt="Now playing" width="400">`
   );
 }
 

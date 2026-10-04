@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import type { Env } from './env.js';
 import { badgeRoute } from './routes/badge.js';
-import { homeRoute } from './routes/home.js';
+import { counterRoute, homeRoute, spotifyPageRoute } from './routes/pages.js';
 import { spotifyCallbackRoute, spotifyCardRoute, spotifyLoginRoute, spotifyOpenRoute } from './routes/spotify.js';
 import { themesRoute } from './routes/themes.js';
 
@@ -12,6 +12,8 @@ export const app = new Hono<{ Bindings: Env }>();
 app.use('*', cors());
 
 app.get('/', homeRoute);
+app.get('/counter', counterRoute);
+app.get('/now-playing', spotifyPageRoute);
 app.get('/themes', themesRoute);
 app.get('/spotify', spotifyCardRoute);
 app.get('/spotify/open', spotifyOpenRoute);
