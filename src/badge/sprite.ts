@@ -5,7 +5,7 @@ import { svgDocument } from './svg.js';
 /** Base64 data URIs per image, built on first use and kept for the lifetime of the isolate. */
 const dataUris = new WeakMap<ArrayBuffer, string>();
 
-function dataUri(image: ArrayBuffer): string {
+export function dataUri(image: ArrayBuffer): string {
   let uri = dataUris.get(image);
   if (!uri) {
     uri = `data:image/png;base64,${toBase64(new Uint8Array(image))}`;

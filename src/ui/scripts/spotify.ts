@@ -25,6 +25,7 @@ export const spotifyScript = String.raw`
     builder.setColor(params, 'bg', fields.bg);
     builder.setColor(params, 'color', fields.color);
     builder.setColor(params, 'accent', fields.accent);
+    if (style === 'mascot' && fields.mascot.value !== 'dragon') params.set('mascot', fields.mascot.value);
     if (!fields.cover.checked) params.set('cover', '0');
     if (!fields.progress.checked) params.set('progress', '0');
     builder.setScale(params);

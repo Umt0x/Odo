@@ -1,5 +1,6 @@
 import type { GlyphId } from '../themes/catalog.js';
 import type { GlyphStyle } from './options.js';
+import { PIXEL_GLYPHS } from '../lib/pixel-font.js';
 import { svgDocument } from './svg.js';
 
 interface Colors {
@@ -14,20 +15,6 @@ interface Drawing {
 }
 
 const MONO = 'ui-monospace,SFMono-Regular,Menlo,Consolas,monospace';
-
-/** 5×7 bitmap font; each string is one row, `1` marks a lit pixel. */
-const PIXEL_FONT: Record<string, readonly string[]> = {
-  0: ['01110', '10001', '10001', '10001', '10001', '10001', '01110'],
-  1: ['00100', '01100', '00100', '00100', '00100', '00100', '01110'],
-  2: ['01110', '10001', '00001', '00010', '00100', '01000', '11111'],
-  3: ['11111', '00010', '00100', '00010', '00001', '10001', '01110'],
-  4: ['00010', '00110', '01010', '10010', '11111', '00010', '00010'],
-  5: ['11111', '10000', '11110', '00001', '00001', '10001', '01110'],
-  6: ['00110', '01000', '10000', '11110', '10001', '10001', '01110'],
-  7: ['11111', '00001', '00010', '00100', '01000', '01000', '01000'],
-  8: ['01110', '10001', '10001', '01110', '10001', '10001', '01110'],
-  9: ['01110', '10001', '10001', '01111', '00001', '00010', '01100'],
-};
 
 /** Lit segments per digit; a top, b top-right, c bottom-right, d bottom, e bottom-left, f top-left, g middle. */
 const SEGMENTS: Record<string, string> = {
@@ -54,7 +41,7 @@ function drawPixel(digits: string[], { foreground, background }: Colors): Drawin
   let path = '';
   digits.forEach((digit, i) => {
     const left = pad + i * (glyphWidth + gap);
-    PIXEL_FONT[digit].forEach((row, y) => {
+    PIXEL_GLYPHS[digit].forEach((row, y) => {
       [...row].forEach((bit, x) => {
         if (bit === '1') path += `M${left + x * pitch} ${pad + y * pitch}h${dot}v${dot}h-${dot}z`;
       });

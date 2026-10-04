@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { app } from '../src/app.js';
-import { parseCardOptions, renderSpotifyCard } from '../src/spotify/card.js';
+import { toPixelText } from '../src/lib/pixel-font.js';
+import { CARD_STYLES, parseCardOptions, renderSpotifyCard } from '../src/spotify/card.js';
 import { SpotifyAccount, type NowPlaying } from '../src/spotify/spotify-account.js';
 import { fakeDurableState } from './helpers.js';
 
@@ -189,5 +190,40 @@ describe('Spotify routes', () => {
 
   it('says when it is not configured', async () => {
     expect((await app.request('/spotify/login')).status).toBe(503);
+  });
+});
+
+describe('every card style', () => {
+  const track: NowPlaying = {
+    state: 'playing',
+    title: '<script>alert(1)</script> & a long title that keeps going',
+    artist: 'Çubuklu Yaşar',
+    url: null,
+    cover: 'data:image/jpeg;base64,AQID',
+    progressMs: 60_000,
+    durationMs: 240_000,
+  };
+
+  it.each(CARD_STYLES)('%s renders a track, escaped, and the empty states', (style) => {
+    const options = parseCardOptions((name) => (name === 'style' ? style : undefined));
+    const svg = renderSpotifyCard(track, options);
+    expect(svg).toMatch(/^<svg [^>]*viewBox="0 0 [\d.]+ [\d.]+">/);
+    expect(svg).not.toContain('<script>');
+
+    for (const state of ['disconnected', 'idle', 'unavailable'] as const) {
+      expect(renderSpotifyCard({ state }, options)).toMatch(/^<svg /);
+    }
+  });
+
+  it('picks the mascot character from the query', () => {
+    expect(parseCardOptions(() => undefined).mascot).toEqual({ set: 'dragon', digit: 7 });
+    expect(parseCardOptions((name) => (name === 'mascot' ? 'robot' : undefined)).mascot).toEqual({ set: 'robot', digit: 1 });
+    expect(parseCardOptions((name) => (name === 'mascot' ? 'alien-9' : undefined)).mascot).toEqual({ set: 'alien', digit: 9 });
+    expect(parseCardOptions((name) => (name === 'mascot' ? 'cat-3' : undefined)).mascot).toEqual({ set: 'dragon', digit: 7 });
+  });
+
+  it('maps any text onto the LCD pixel font', () => {
+    expect(toPixelText('Çubuklu Yaşar — Kostak')).toBe('CUBUKLU YASAR - KOSTAK');
+    expect(toPixelText('夜に駆ける (YOASOBI)')).toBe('? (YOASOBI)');
   });
 });

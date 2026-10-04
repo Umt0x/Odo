@@ -167,13 +167,8 @@ button, input { font: inherit; color: inherit; }
 .row--stacked > .row__label { margin-bottom: 12px; }
 .row--stacked > :not(legend) { clear: both; }
 
-/* Settings only apply to some styles: data-for lists them, data-mode is the current one. */
-.builder[data-mode="flat"] [data-for]:not([data-for~="flat"]),
-.builder[data-mode="glyph"] [data-for]:not([data-for~="glyph"]),
-.builder[data-mode="sprite"] [data-for]:not([data-for~="sprite"]),
-.builder[data-mode="card"] [data-for]:not([data-for~="card"]),
-.builder[data-mode="compact"] [data-for]:not([data-for~="compact"]),
-.builder[data-mode="vinyl"] [data-for]:not([data-for~="vinyl"]) { display: none; }
+/* Settings only apply to some styles; the shared script sets [hidden] from data-for. */
+[hidden] { display: none !important; }
 
 @media (min-width: 600px) {
   .row:not(.row--stacked) { grid-template-columns: 180px minmax(0, 1fr); gap: 24px; }

@@ -61,6 +61,15 @@ export const sharedScript = String.raw`
         stageName.textContent = urls.handle;
       }
       if (options.afterRender) options.afterRender();
+      syncVisibility();
+    }
+
+    // Rows marked data-for="a b" only show while the form's mode is a or b.
+    function syncVisibility() {
+      var mode = form.dataset.mode;
+      Array.prototype.forEach.call(form.querySelectorAll('[data-for]'), function (element) {
+        element.hidden = element.dataset.for.split(' ').indexOf(mode) === -1;
+      });
     }
 
     function syncScale() {
