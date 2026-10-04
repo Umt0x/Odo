@@ -169,4 +169,4 @@ test/                    Vitest suites
 
 ## License
 
-[MIT](LICENSE) © 2026 Umt. The sprite images in `src/assets` are covered by [their own license](src/assets/LICENSE).
+[MIT](LICENSE) © 2026 Umt
