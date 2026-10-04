@@ -4,7 +4,7 @@
 
 **Visitor counter badges for your GitHub profile and website.**
 
-Flat pills, drawn digit styles or sprite characters, counted atomically on Cloudflare's edge — and free to host.
+Flat pills or retro digit styles, counted atomically on Cloudflare's edge — and free to host.
 
 <br>
 
@@ -37,7 +37,7 @@ Flat pills, drawn digit styles or sprite characters, counted atomically on Cloud
 
 - **One line to add.** Paste a Markdown image into your README and you're done.
 - **Accurate.** Every handle gets its own Durable Object, so simultaneous visits are never lost.
-- **Plenty of looks.** A minimal flat pill, four digit styles drawn in code (pixel, LED, odometer, flip) — all recolorable — and sprite characters.
+- **Five looks.** A minimal flat pill and four digit styles — pixel, LED, odometer and flip — all drawn in code and fully recolorable.
 - **Builder included.** Open the worker in a browser to design your badge with a live preview.
 - **Safe to embed.** Every input is validated, and badges are served with a strict Content-Security-Policy.
 - **Free.** The Workers Free plan covers roughly 100k badge views a day.
@@ -84,17 +84,14 @@ Large numbers are shortened automatically: `1337` → `1.3K`, `1250000` → `1.3
 | Option | Description | Default |
 | :--- | :--- | :--- |
 | `length` | Minimum number of digits, `1` – `16`; shorter counts are padded with zeros | `7` |
-| `color` | Digit color — drawn themes only | per theme |
-| `bg` | Background color — drawn themes only | per theme |
-| `pixelated` | `0` turns off crisp pixel-art scaling — sprite themes only | on |
+| `color` | Digit color | per theme |
+| `bg` | Background color, or `transparent` | per theme |
 
 ## Themes
 
 The list is also available as JSON at `/themes`.
 
-### Drawn
-
-Drawn entirely in code, so they stay sharp at any size and take any colors via `color` and `bg`.
+Every theme is drawn in code: it stays sharp at any size and takes any colors via `color` and `bg`.
 
 | Theme | `theme=` | Preview |
 | :--- | :--- | :--- |
@@ -107,15 +104,6 @@ Drawn entirely in code, so they stay sharp at any size and take any colors via `
 ![Visitor count](https://odo.<your-account>.workers.dev/@your-name?theme=led&length=5&color=00e5ff&bg=001018)
 ```
 
-### Sprites
-
-One character per digit, served from R2.
-
-| Theme | `theme=` | Preview |
-| :--- | :--- | :--- |
-| Adventure Time | `adventuretime` | <img src="src/assets/adventuretime/2.png" height="40"><img src="src/assets/adventuretime/0.png" height="40"><img src="src/assets/adventuretime/2.png" height="40"><img src="src/assets/adventuretime/6.png" height="40"> |
-| Gumball | `gumball` | <img src="src/assets/gumball/2.png" height="40"><img src="src/assets/gumball/0.png" height="40"><img src="src/assets/gumball/2.png" height="40"><img src="src/assets/gumball/6.png" height="40"> |
-
 ## Self-hosting
 
 odo runs on your own Cloudflare account. You need [Node.js](https://nodejs.org) 18+ and a free [Cloudflare](https://dash.cloudflare.com/sign-up) account.
@@ -127,11 +115,7 @@ npm install
 # 2. Sign in to Cloudflare
 npx wrangler login
 
-# 3. Create the bucket for the sprite images and upload them
-npx wrangler r2 bucket create odo-sprites
-npm run sprites:upload:remote
-
-# 4. Deploy
+# 3. Deploy
 npm run deploy
 ```
 
@@ -140,7 +124,6 @@ Wrangler prints your URL when the deploy finishes. The visit counter needs no se
 ## Development
 
 ```bash
-npm run sprites:upload   # copy the sprites into the local bucket (once)
 npm run dev              # builder at http://localhost:8787
 npm test                 # run the test suite
 npm run typecheck        # type-check with tsc
@@ -154,8 +137,7 @@ GET /@umt?theme=led
    ├─ badge/options.ts      validate the handle and every option
    ├─ counter/              add a visit in the handle's Durable Object (skipped for render=true or num=)
    ├─ badge/flat.ts         draw the flat pill, or
-   │  badge/glyph.ts        draw pixel / LED / odometer / flip digits, or
-   │  badge/sprite.ts       lay out digit images loaded from R2 (cached in memory)
+   │  badge/glyph.ts        draw pixel / LED / odometer / flip digits
    └─ routes/badge.ts       return the SVG with no-store and CSP headers
 ```
 
@@ -167,22 +149,19 @@ src/
 ├── app.ts               Route table
 ├── env.ts               Cloudflare bindings
 ├── routes/              One handler per route: badge, themes, builder page
-├── badge/               Option parsing and the flat, glyph and sprite renderers
+├── badge/               Option parsing and the flat / digit renderers
 ├── counter/             VisitCounter Durable Object and its client
-├── themes/catalog.ts    Every theme: ids, labels, default colors, cell sizes
+├── themes/catalog.ts    Every theme: ids, labels and default colors
 ├── ui/                  Builder page: markup, styles and browser script
-├── lib/                 Escaping and other text helpers
-└── assets/              Sprite digit images, uploaded to R2
-scripts/
-└── upload-sprites.mjs   Uploads src/assets to R2
+└── lib/                 Escaping and other text helpers
 test/                    Vitest suites
 ```
 
-### Adding a sprite theme
+### Adding a theme
 
-1. Add `0.png` … `9.png` (or `.gif`) to `src/assets/<id>/`.
-2. Register the theme in `src/themes/catalog.ts`. `npm test` tells you if the cell size doesn't match the images.
-3. Run `npm run sprites:upload`, and `npm run sprites:upload:remote` before deploying.
+1. Add a drawing function to `src/badge/glyph.ts` that turns a list of digits into SVG.
+2. Register it in `DRAWERS` there and in `src/themes/catalog.ts` with a label and default colors.
+3. `npm test` checks that every theme renders.
 
 ## License
 

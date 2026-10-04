@@ -40,10 +40,10 @@ describe('fixed counts (num)', () => {
 });
 
 describe('style selection', () => {
-  it('uses the flat style unless a known sprite theme is requested', () => {
+  it('uses the flat style unless a known theme is requested', () => {
     expect(parse('umt').style.kind).toBe('flat');
     expect(parse('umt', { theme: 'nope' }).style.kind).toBe('flat');
-    expect(parse('umt', { theme: 'gumball' }).style.kind).toBe('sprite');
+    expect(parse('umt', { theme: 'odometer' }).style.kind).toBe('glyph');
   });
 
   it('gives drawn themes their own default colors, overridable by color and bg', () => {
@@ -61,8 +61,8 @@ describe('style selection', () => {
 
   it('clamps digits and scale into their ranges', () => {
     const digits = (length: string) => {
-      const { style } = parse('umt', { theme: 'gumball', length });
-      return style.kind === 'sprite' ? style.digits : NaN;
+      const { style } = parse('umt', { theme: 'odometer', length });
+      return style.kind === 'glyph' ? style.digits : NaN;
     };
     expect(digits('3')).toBe(3);
     expect(digits('0')).toBe(7);

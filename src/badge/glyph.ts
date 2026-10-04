@@ -1,4 +1,4 @@
-import type { GlyphId } from '../themes/catalog.js';
+import type { ThemeId } from '../themes/catalog.js';
 import type { GlyphStyle } from './options.js';
 import { svgDocument } from './svg.js';
 
@@ -173,7 +173,7 @@ function drawFlip(digits: string[], { foreground, background }: Colors): Drawing
   };
 }
 
-const DRAWERS: Record<GlyphId, (digits: string[], colors: Colors) => Drawing> = {
+const DRAWERS: Record<ThemeId, (digits: string[], colors: Colors) => Drawing> = {
   pixel: drawPixel,
   led: drawLed,
   odometer: drawOdometer,

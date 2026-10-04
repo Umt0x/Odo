@@ -110,7 +110,6 @@ button, input { font: inherit; color: inherit; }
 
 /* Settings only apply to some styles: data-for lists them, data-mode is the current one. */
 .builder[data-mode="flat"] [data-for]:not([data-for~="flat"]),
-.builder[data-mode="sprite"] [data-for]:not([data-for~="sprite"]),
 .builder[data-mode="glyph"] [data-for]:not([data-for~="glyph"]) { display: none; }
 
 @media (min-width: 600px) {

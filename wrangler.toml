@@ -11,8 +11,3 @@ class_name = "VisitCounter"
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["VisitCounter"]
-
-# Digit images for the sprite themes (upload with `npm run sprites:upload`)
-[[r2_buckets]]
-binding = "SPRITES"
-bucket_name = "odo-sprites"

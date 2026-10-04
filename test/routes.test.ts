@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { app } from '../src/app.js';
-import { DIGIT_THEMES } from '../src/themes/catalog.js';
+import { GLYPH_THEMES } from '../src/themes/catalog.js';
 import { badgeText } from './helpers.js';
 
 describe('GET /', () => {
@@ -12,16 +12,16 @@ describe('GET /', () => {
     const html = await res.text();
     expect(html).toContain('<title>Odo');
     expect(html).toContain('Umt');
-    for (const theme of DIGIT_THEMES) {
+    for (const theme of GLYPH_THEMES) {
       expect(html, theme.id).toContain(`name="theme" value="${theme.id}"`);
     }
   });
 });
 
 describe('GET /themes', () => {
-  it('lists flat and every sprite theme', async () => {
+  it('lists flat and every theme', async () => {
     const { themes } = (await (await app.request('/themes')).json()) as { themes: { id: string }[] };
-    expect(themes.map((t) => t.id)).toEqual(['flat', ...DIGIT_THEMES.map((t) => t.id)]);
+    expect(themes.map((t) => t.id)).toEqual(['flat', ...GLYPH_THEMES.map((t) => t.id)]);
   });
 });
 
@@ -68,7 +68,7 @@ describe('GET /@:handle', () => {
     expect(svg).toContain('&lt;s');
   });
 
-  it('draws code-based themes without any bucket', async () => {
+  it('draws digit themes with custom colors', async () => {
     const res = await app.request('/@glyph-user?theme=led&length=4&num=2026&color=00ff00');
     expect(res.status).toBe(200);
     const svg = await res.text();

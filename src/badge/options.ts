@@ -1,5 +1,5 @@
 import { graphemes, safeColor } from '../lib/text.js';
-import { findTheme, type GlyphTheme, type SpriteTheme } from '../themes/catalog.js';
+import { findTheme, type GlyphTheme } from '../themes/catalog.js';
 
 export const MAX_HANDLE_LENGTH = 39;
 export const DIGITS = { min: 1, max: 16, fallback: 7 } as const;
@@ -25,14 +25,6 @@ export interface FlatStyle {
   animation: Animation;
 }
 
-export interface SpriteStyle {
-  kind: 'sprite';
-  theme: SpriteTheme;
-  /** Minimum number of digits; the count is left-padded with zeros. */
-  digits: number;
-  pixelated: boolean;
-}
-
 export interface GlyphStyle {
   kind: 'glyph';
   theme: GlyphTheme;
@@ -53,7 +45,7 @@ export interface BadgeRequest {
   style: BadgeStyle;
 }
 
-export type BadgeStyle = FlatStyle | SpriteStyle | GlyphStyle;
+export type BadgeStyle = FlatStyle | GlyphStyle;
 
 export type ParseResult = { ok: true; value: BadgeRequest } | { ok: false; error: string };
 
@@ -94,16 +86,7 @@ export function parseBadgeRequest(rawHandle: string, query: Query): ParseResult 
 function parseStyle(query: Query): BadgeStyle {
   const theme = findTheme(query('theme'));
 
-  if (theme?.kind === 'sprite') {
-    return {
-      kind: 'sprite',
-      theme,
-      digits: toDigits(query('length')),
-      pixelated: query('pixelated') !== '0',
-    };
-  }
-
-  if (theme?.kind === 'glyph') {
+  if (theme) {
     return {
       kind: 'glyph',
       theme,

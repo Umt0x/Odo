@@ -1,6 +1,6 @@
 import { ANIMATIONS, DIGITS, FLAT_COLORS, MAX_HANDLE_LENGTH } from '../badge/options.js';
 import { escapeXml } from '../lib/text.js';
-import { DIGIT_THEMES, type DigitTheme } from '../themes/catalog.js';
+import { GLYPH_THEMES, type GlyphTheme } from '../themes/catalog.js';
 import { clientScript } from './client.js';
 import { styles } from './styles.js';
 
@@ -41,9 +41,9 @@ function sampleBadgeUrl(themeId: string | null): string {
  * One card in the style picker. `data-kind` tells the browser script which
  * settings to show; drawn themes also carry their default colors.
  */
-function styleOption(value: string, label: string, thumbnail: string, theme?: DigitTheme): string {
-  const kind = theme?.kind ?? 'flat';
-  const colors = theme?.kind === 'glyph' ? ` data-color="${theme.colors.foreground}" data-bg="${theme.colors.background}"` : '';
+function styleOption(value: string, label: string, thumbnail: string, theme?: GlyphTheme): string {
+  const kind = theme ? 'glyph' : 'flat';
+  const colors = theme ? ` data-color="${theme.colors.foreground}" data-bg="${theme.colors.background}"` : '';
   return `
             <label class="style">
               <input type="radio" name="theme" value="${escapeXml(value)}" data-kind="${kind}"${colors}${kind === 'flat' ? ' checked' : ''}>
@@ -68,7 +68,7 @@ function animationOption(name: (typeof ANIMATIONS)[number]): string {
 export function renderHomePage(): string {
   const styleOptions = [
     styleOption('flat', 'Flat', sampleBadgeUrl(null)),
-    ...DIGIT_THEMES.map((theme) => styleOption(theme.id, theme.label, sampleBadgeUrl(theme.id), theme)),
+    ...GLYPH_THEMES.map((theme) => styleOption(theme.id, theme.label, sampleBadgeUrl(theme.id), theme)),
   ].join('');
 
   return `<!doctype html>
@@ -145,7 +145,7 @@ export function renderHomePage(): string {
             </div>
           </fieldset>
 
-          <div class="row" data-for="sprite glyph">
+          <div class="row" data-for="glyph">
             <span class="row__label" id="digits-label">Digits<small>Short counts are padded with zeros.</small></span>
             <div class="stepper" role="group" aria-labelledby="digits-label">
               <button type="button" data-step="-1" aria-label="Fewer digits">−</button>
@@ -153,13 +153,6 @@ export function renderHomePage(): string {
               <button type="button" data-step="1" aria-label="More digits">+</button>
             </div>
           </div>
-          <label class="row" data-for="sprite">
-            <span class="row__label">Pixel art<small>Keeps sprites sharp when scaled.</small></span>
-            <span class="switch">
-              <input type="checkbox" name="pixelated" checked>
-              <span class="switch__track" aria-hidden="true"></span>
-            </span>
-          </label>
 
           <label class="row">
             <span class="row__label">Size</span>

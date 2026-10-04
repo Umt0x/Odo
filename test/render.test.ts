@@ -1,17 +1,11 @@
-import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { renderFlatBadge } from '../src/badge/flat.js';
 import { renderGlyphBadge } from '../src/badge/glyph.js';
-import { FLAT_COLORS, type FlatStyle, type GlyphStyle, type SpriteStyle } from '../src/badge/options.js';
-import { renderSpriteBadge } from '../src/badge/sprite.js';
-import { GLYPH_THEMES, SPRITE_THEMES, findSpriteTheme, findTheme, type GlyphTheme } from '../src/themes/catalog.js';
-import { badgeText, fakeBucket } from './helpers.js';
+import { FLAT_COLORS, type FlatStyle, type GlyphStyle } from '../src/badge/options.js';
+import { GLYPH_THEMES, findTheme } from '../src/themes/catalog.js';
+import { badgeText } from './helpers.js';
 
 const flat: FlatStyle = { kind: 'flat', ...FLAT_COLORS, icon: '', animation: 'none' };
-
-function sprite(themeId: string, digits = 1): SpriteStyle {
-  return { kind: 'sprite', theme: findSpriteTheme(themeId)!, digits, pixelated: true };
-}
 
 describe('flat badge', () => {
   it('shows the count in compact form', () => {
@@ -32,56 +26,9 @@ describe('flat badge', () => {
   });
 });
 
-describe('sprite badge', () => {
-  it('pads the count and loads each distinct digit from R2 only once', async () => {
-    const { bucket, reads } = fakeBucket(['gumball/0.png', 'gumball/1.png']);
-    const svg = await renderSpriteBadge(11, sprite('gumball', 7), 1, bucket);
-
-    expect(svg.match(/<image /g)).toHaveLength(7);
-    expect(svg).toContain(`viewBox="0 0 ${245 * 7} 325"`);
-    expect(reads.sort()).toEqual(['gumball/0.png', 'gumball/1.png']);
-  });
-
-  it('leaves a failed digit blank and retries it on the next render', async () => {
-    const { bucket } = fakeBucket(['adventuretime/5.gif'], { failOnce: 'adventuretime/5.png' });
-    const first = await renderSpriteBadge(5, sprite('adventuretime'), 1, bucket);
-    expect(first).not.toContain('<image');
-
-    const second = await renderSpriteBadge(5, sprite('adventuretime'), 1, bucket);
-    expect(second).toContain('href="data:image/gif;base64,');
-  });
-});
-
-describe('theme catalog', () => {
-  const assets = new URL('../src/assets/', import.meta.url);
-
-  function imageSize(bytes: Buffer): [number, number] {
-    return bytes[0] === 0x89
-      ? [bytes.readUInt32BE(16), bytes.readUInt32BE(20)]
-      : [bytes.readUInt16LE(6), bytes.readUInt16LE(8)];
-  }
-
-  it('lists exactly the themes in src/assets', () => {
-    const folders = readdirSync(assets, { withFileTypes: true })
-      .filter((entry) => entry.isDirectory())
-      .map((entry) => entry.name);
-    expect(SPRITE_THEMES.map((t) => t.id).sort()).toEqual(folders.sort());
-  });
-
-  it.each(SPRITE_THEMES.map((t) => [t.id, t] as const))('%s cell fits its widest and tallest digit', (id, theme) => {
-    const sizes = readdirSync(new URL(`${id}/`, assets)).map((file) =>
-      imageSize(readFileSync(new URL(`${id}/${file}`, assets)))
-    );
-    expect(theme.cell).toEqual({
-      width: Math.max(...sizes.map(([w]) => w)),
-      height: Math.max(...sizes.map(([, h]) => h)),
-    });
-  });
-});
-
 describe('glyph badges', () => {
   const glyph = (id: string, digits = 4): GlyphStyle => {
-    const theme = findTheme(id) as GlyphTheme;
+    const theme = findTheme(id)!;
     return { kind: 'glyph', theme, digits, ...theme.colors };
   };
 
