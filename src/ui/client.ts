@@ -31,11 +31,30 @@ export const clientScript = String.raw`
     }
   }
 
+  function selectedTheme() {
+    return form.querySelector('input[name="theme"]:checked');
+  }
+
+  // Drawn themes have their own default colors; show them in the swatches and
+  // treat them as the defaults, so untouched colors stay out of the URL.
+  var flatDefaults = { bg: fields.bg.defaultValue, color: fields.color.defaultValue };
+
+  function resetColors() {
+    var option = selectedTheme();
+    var glyph = option.dataset.kind === 'glyph';
+    ['bg', 'color'].forEach(function (name) {
+      var value = glyph ? option.dataset[name] : flatDefaults[name];
+      fields[name].defaultValue = value;
+      fields[name].value = value;
+    });
+  }
+
   function badgeParams() {
     var params = new URLSearchParams();
     var theme = fields.theme.value;
+    var kind = selectedTheme().dataset.kind;
 
-    if (theme === 'flat') {
+    if (kind === 'flat') {
       var icon = fields.icon.value.trim();
       if (icon) params.set('icon', icon);
       setColor(params, 'bg', fields.bg);
@@ -46,7 +65,12 @@ export const clientScript = String.raw`
       params.set('theme', theme);
       // The field is called "digits": form.elements.length is the number of controls.
       params.set('length', fields.digits.value);
-      if (!fields.pixelated.checked) params.set('pixelated', '0');
+      if (kind === 'glyph') {
+        setColor(params, 'color', fields.color);
+        setColor(params, 'bg', fields.bg);
+      } else if (!fields.pixelated.checked) {
+        params.set('pixelated', '0');
+      }
     }
 
     var scale = parseFloat(fields.scale.value);
@@ -74,7 +98,7 @@ export const clientScript = String.raw`
     params.set('render', 'true');
     stageImage.src = badgeUrl(params);
     stageHandle.textContent = '@' + handle();
-    form.dataset.mode = fields.theme.value === 'flat' ? 'flat' : 'sprite';
+    form.dataset.mode = selectedTheme().dataset.kind;
   }
 
   function syncOutputs() {
@@ -88,6 +112,7 @@ export const clientScript = String.raw`
   form.addEventListener('input', function (event) {
     syncOutputs();
     var type = event.target.type;
+    if (event.target.name === 'theme') resetColors();
     if (type === 'radio' || type === 'checkbox') {
       render();
     } else {

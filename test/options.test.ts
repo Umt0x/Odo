@@ -43,7 +43,16 @@ describe('style selection', () => {
   it('uses the flat style unless a known sprite theme is requested', () => {
     expect(parse('umt').style.kind).toBe('flat');
     expect(parse('umt', { theme: 'nope' }).style.kind).toBe('flat');
-    expect(parse('umt', { theme: 'naruto' }).style.kind).toBe('sprite');
+    expect(parse('umt', { theme: 'gumball' }).style.kind).toBe('sprite');
+  });
+
+  it('gives drawn themes their own default colors, overridable by color and bg', () => {
+    const led = parse('umt', { theme: 'led' }).style;
+    expect(led.kind).toBe('glyph');
+    expect(led.kind === 'glyph' && led.foreground).toBe('#ff453a');
+
+    const custom = parse('umt', { theme: 'led', color: '00ff00', bg: 'transparent' }).style;
+    expect(custom.kind === 'glyph' && [custom.foreground, custom.background]).toEqual(['#00ff00', 'transparent']);
   });
 
   it('does not treat object property names as themes', () => {
@@ -52,7 +61,7 @@ describe('style selection', () => {
 
   it('clamps digits and scale into their ranges', () => {
     const digits = (length: string) => {
-      const { style } = parse('umt', { theme: 'naruto', length });
+      const { style } = parse('umt', { theme: 'gumball', length });
       return style.kind === 'sprite' ? style.digits : NaN;
     };
     expect(digits('3')).toBe(3);

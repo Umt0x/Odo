@@ -1,9 +1,10 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { renderFlatBadge } from '../src/badge/flat.js';
-import { FLAT_COLORS, type FlatStyle, type SpriteStyle } from '../src/badge/options.js';
+import { renderGlyphBadge } from '../src/badge/glyph.js';
+import { FLAT_COLORS, type FlatStyle, type GlyphStyle, type SpriteStyle } from '../src/badge/options.js';
 import { renderSpriteBadge } from '../src/badge/sprite.js';
-import { SPRITE_THEMES, findSpriteTheme } from '../src/themes/catalog.js';
+import { GLYPH_THEMES, SPRITE_THEMES, findSpriteTheme, findTheme, type GlyphTheme } from '../src/themes/catalog.js';
 import { badgeText, fakeBucket } from './helpers.js';
 
 const flat: FlatStyle = { kind: 'flat', ...FLAT_COLORS, icon: '', animation: 'none' };
@@ -33,20 +34,20 @@ describe('flat badge', () => {
 
 describe('sprite badge', () => {
   it('pads the count and loads each distinct digit from R2 only once', async () => {
-    const { bucket, reads } = fakeBucket(['naruto/0.png', 'naruto/1.png']);
-    const svg = await renderSpriteBadge(11, sprite('naruto', 7), 1, bucket);
+    const { bucket, reads } = fakeBucket(['gumball/0.png', 'gumball/1.png']);
+    const svg = await renderSpriteBadge(11, sprite('gumball', 7), 1, bucket);
 
     expect(svg.match(/<image /g)).toHaveLength(7);
-    expect(svg).toContain(`viewBox="0 0 ${157 * 7} 400"`);
-    expect(reads.sort()).toEqual(['naruto/0.png', 'naruto/1.png']);
+    expect(svg).toContain(`viewBox="0 0 ${245 * 7} 325"`);
+    expect(reads.sort()).toEqual(['gumball/0.png', 'gumball/1.png']);
   });
 
   it('leaves a failed digit blank and retries it on the next render', async () => {
-    const { bucket } = fakeBucket(['bleach/5.gif'], { failOnce: 'bleach/5.png' });
-    const first = await renderSpriteBadge(5, sprite('bleach'), 1, bucket);
+    const { bucket } = fakeBucket(['adventuretime/5.gif'], { failOnce: 'adventuretime/5.png' });
+    const first = await renderSpriteBadge(5, sprite('adventuretime'), 1, bucket);
     expect(first).not.toContain('<image');
 
-    const second = await renderSpriteBadge(5, sprite('bleach'), 1, bucket);
+    const second = await renderSpriteBadge(5, sprite('adventuretime'), 1, bucket);
     expect(second).toContain('href="data:image/gif;base64,');
   });
 });
@@ -75,5 +76,41 @@ describe('theme catalog', () => {
       width: Math.max(...sizes.map(([w]) => w)),
       height: Math.max(...sizes.map(([, h]) => h)),
     });
+  });
+});
+
+describe('glyph badges', () => {
+  const glyph = (id: string, digits = 4): GlyphStyle => {
+    const theme = findTheme(id) as GlyphTheme;
+    return { kind: 'glyph', theme, digits, ...theme.colors };
+  };
+
+  it.each(GLYPH_THEMES.map((t) => t.id))('%s draws one cell per digit and widens with the count', (id) => {
+    const width = (svg: string) => Number(svg.match(/viewBox="0 0 ([\d.]+) /)![1]);
+    const four = renderGlyphBadge(2026, glyph(id), 1);
+    const seven = renderGlyphBadge(1234567, glyph(id), 1);
+
+    expect(four).toMatch(/^<svg [^>]*viewBox="0 0 [\d.]+ [\d.]+">/);
+    expect(width(seven)).toBeGreaterThan(width(four));
+  });
+
+  it('uses the requested colors', () => {
+    const svg = renderGlyphBadge(8, { ...glyph('pixel', 1), foreground: '#123456', background: '#abcdef' }, 1);
+    expect(svg).toContain('fill="#123456"');
+    expect(svg).toContain('fill="#abcdef"');
+  });
+
+  it('lights the right LED segments', () => {
+    const lit = (digit: number) =>
+      (renderGlyphBadge(digit, glyph('led', 1), 1).match(/<rect [^>]*rx="1"\/>/g) ?? []).length;
+    expect(lit(1)).toBe(2);
+    expect(lit(8)).toBe(7);
+  });
+
+  it('shows the digits as text on odometer and flip', () => {
+    for (const id of ['odometer', 'flip']) {
+      const svg = renderGlyphBadge(2026, glyph(id), 1);
+      expect(svg.match(/<text [^>]*>(\d)<\/text>/g)?.map((t) => t.replace(/<[^>]+>/g, '')).join('')).toBe('2026');
+    }
   });
 });

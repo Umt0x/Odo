@@ -1,5 +1,5 @@
 import { graphemes, safeColor } from '../lib/text.js';
-import { findSpriteTheme, type SpriteTheme } from '../themes/catalog.js';
+import { findTheme, type GlyphTheme, type SpriteTheme } from '../themes/catalog.js';
 
 export const MAX_HANDLE_LENGTH = 39;
 export const DIGITS = { min: 1, max: 16, fallback: 7 } as const;
@@ -33,6 +33,15 @@ export interface SpriteStyle {
   pixelated: boolean;
 }
 
+export interface GlyphStyle {
+  kind: 'glyph';
+  theme: GlyphTheme;
+  /** Minimum number of digits; the count is left-padded with zeros. */
+  digits: number;
+  foreground: string;
+  background: string;
+}
+
 export interface BadgeRequest {
   /** Normalized handle: lowercase, `[a-z0-9_-]`, at most MAX_HANDLE_LENGTH long. */
   handle: string;
@@ -41,8 +50,10 @@ export interface BadgeRequest {
   /** `num=`: show this number instead of the real count. */
   fixedCount: number | null;
   scale: number;
-  style: FlatStyle | SpriteStyle;
+  style: BadgeStyle;
 }
+
+export type BadgeStyle = FlatStyle | SpriteStyle | GlyphStyle;
 
 export type ParseResult = { ok: true; value: BadgeRequest } | { ok: false; error: string };
 
@@ -68,23 +79,6 @@ export function parseBadgeRequest(rawHandle: string, query: Query): ParseResult 
     }
   }
 
-  const theme = findSpriteTheme(query('theme'));
-  const style: FlatStyle | SpriteStyle = theme
-    ? {
-        kind: 'sprite',
-        theme,
-        digits: toDigits(query('length')),
-        pixelated: query('pixelated') !== '0',
-      }
-    : {
-        kind: 'flat',
-        background: safeColor(query('bg'), FLAT_COLORS.background),
-        foreground: safeColor(query('color'), FLAT_COLORS.foreground),
-        border: safeColor(query('stroke'), FLAT_COLORS.border),
-        icon: graphemes(query('icon') ?? '').slice(0, MAX_ICON_GRAPHEMES).join(''),
-        animation: toAnimation(query('animation')),
-      };
-
   return {
     ok: true,
     value: {
@@ -92,8 +86,40 @@ export function parseBadgeRequest(rawHandle: string, query: Query): ParseResult 
       readOnly: query('render') === 'true',
       fixedCount,
       scale: toScale(query('scale')),
-      style,
+      style: parseStyle(query),
     },
+  };
+}
+
+function parseStyle(query: Query): BadgeStyle {
+  const theme = findTheme(query('theme'));
+
+  if (theme?.kind === 'sprite') {
+    return {
+      kind: 'sprite',
+      theme,
+      digits: toDigits(query('length')),
+      pixelated: query('pixelated') !== '0',
+    };
+  }
+
+  if (theme?.kind === 'glyph') {
+    return {
+      kind: 'glyph',
+      theme,
+      digits: toDigits(query('length')),
+      foreground: safeColor(query('color'), theme.colors.foreground),
+      background: safeColor(query('bg'), theme.colors.background),
+    };
+  }
+
+  return {
+    kind: 'flat',
+    background: safeColor(query('bg'), FLAT_COLORS.background),
+    foreground: safeColor(query('color'), FLAT_COLORS.foreground),
+    border: safeColor(query('stroke'), FLAT_COLORS.border),
+    icon: graphemes(query('icon') ?? '').slice(0, MAX_ICON_GRAPHEMES).join(''),
+    animation: toAnimation(query('animation')),
   };
 }
 

@@ -4,7 +4,7 @@
 
 **Visitor counter badges for your GitHub profile and website.**
 
-Clean flat pills or pixel-art sprites, counted atomically on Cloudflare's edge — and free to host.
+Flat pills, drawn digit styles or sprite characters, counted atomically on Cloudflare's edge — and free to host.
 
 <br>
 
@@ -16,7 +16,10 @@ Clean flat pills or pixel-art sprites, counted atomically on Cloudflare's edge �
 
 <br><br>
 
-<img src="src/assets/naruto/2.png" height="64" alt="2"><img src="src/assets/naruto/0.png" height="64" alt="0"><img src="src/assets/naruto/2.png" height="64" alt="2"><img src="src/assets/naruto/6.png" height="64" alt="6">
+<img src="docs/badges/pixel.svg" alt="Pixel" height="28"> &nbsp;
+<img src="docs/badges/led.svg" alt="LED" height="28"> &nbsp;
+<img src="docs/badges/odometer.svg" alt="Odometer" height="28"> &nbsp;
+<img src="docs/badges/flip.svg" alt="Flip" height="28">
 
 <br><br>
 
@@ -24,7 +27,7 @@ Clean flat pills or pixel-art sprites, counted atomically on Cloudflare's edge �
 [![Cloudflare Workers](https://img.shields.io/badge/runs%20on-Cloudflare%20Workers-f38020?logo=cloudflare&logoColor=white)](https://workers.cloudflare.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)](tsconfig.json)
 
-[Usage](#usage) · [Options](#options) · [Sprite themes](#sprite-themes) · [Self-hosting](#self-hosting) · [Development](#development)
+[Usage](#usage) · [Options](#options) · [Themes](#themes) · [Self-hosting](#self-hosting) · [Development](#development)
 
 </div>
 
@@ -34,7 +37,7 @@ Clean flat pills or pixel-art sprites, counted atomically on Cloudflare's edge �
 
 - **One line to add.** Paste a Markdown image into your README and you're done.
 - **Accurate.** Every handle gets its own Durable Object, so simultaneous visits are never lost.
-- **Two looks.** A minimal flat pill you can recolor, or a row of pixel-art digits.
+- **Plenty of looks.** A minimal flat pill, four digit styles drawn in code (pixel, LED, odometer, flip) — all recolorable — and sprite characters.
 - **Builder included.** Open the worker in a browser to design your badge with a live preview.
 - **Safe to embed.** Every input is validated, and badges are served with a strict Content-Security-Policy.
 - **Free.** The Workers Free plan covers roughly 100k badge views a day.
@@ -59,7 +62,7 @@ Add options as query parameters, e.g. `/@your-name?icon=👀&bg=0d1117&color=58a
 
 | Option | Description | Default |
 | :--- | :--- | :--- |
-| `theme` | `flat`, or a [sprite theme](#sprite-themes) id | `flat` |
+| `theme` | `flat`, or a [theme](#themes) id | `flat` |
 | `scale` | Display size multiplier, `0.1` – `10` | `1` |
 | `num` | Show this number instead of counting (whole number ≥ 0) | — |
 | `render` | `true` shows the current count without adding a visit | — |
@@ -76,27 +79,40 @@ Add options as query parameters, e.g. `/@your-name?icon=👀&bg=0d1117&color=58a
 
 Large numbers are shortened automatically: `1337` → `1.3K`, `1250000` → `1.3M`.
 
-### Sprites
+### Digit themes
 
 | Option | Description | Default |
 | :--- | :--- | :--- |
 | `length` | Minimum number of digits, `1` – `16`; shorter counts are padded with zeros | `7` |
-| `pixelated` | `0` turns off crisp pixel-art scaling | on |
+| `color` | Digit color — drawn themes only | per theme |
+| `bg` | Background color — drawn themes only | per theme |
+| `pixelated` | `0` turns off crisp pixel-art scaling — sprite themes only | on |
 
-## Sprite themes
+## Themes
 
-Use the id as `theme`, for example `/@your-name?theme=naruto&length=5`. The list is also available as JSON at `/themes`.
+The list is also available as JSON at `/themes`.
+
+### Drawn
+
+Drawn entirely in code, so they stay sharp at any size and take any colors via `color` and `bg`.
 
 | Theme | `theme=` | Preview |
 | :--- | :--- | :--- |
-| Naruto | `naruto` | <img src="src/assets/naruto/2.png" height="40"><img src="src/assets/naruto/0.png" height="40"><img src="src/assets/naruto/2.png" height="40"><img src="src/assets/naruto/6.png" height="40"> |
-| One Piece | `onepiece` | <img src="src/assets/onepiece/2.png" height="40"><img src="src/assets/onepiece/0.png" height="40"><img src="src/assets/onepiece/2.png" height="40"><img src="src/assets/onepiece/6.png" height="40"> |
-| Bleach | `bleach` | <img src="src/assets/bleach/2.gif" height="40"><img src="src/assets/bleach/0.gif" height="40"><img src="src/assets/bleach/2.gif" height="40"><img src="src/assets/bleach/6.gif" height="40"> |
-| Dragon Ball | `dragonball` | <img src="src/assets/dragonball/2.png" height="40"><img src="src/assets/dragonball/0.png" height="40"><img src="src/assets/dragonball/2.png" height="40"><img src="src/assets/dragonball/6.png" height="40"> |
-| Attack on Titan | `aot` | <img src="src/assets/aot/2.png" height="40"><img src="src/assets/aot/0.png" height="40"><img src="src/assets/aot/2.png" height="40"><img src="src/assets/aot/6.png" height="40"> |
-| Code Geass | `codegeass` | <img src="src/assets/codegeass/2.png" height="40"><img src="src/assets/codegeass/0.png" height="40"><img src="src/assets/codegeass/2.png" height="40"><img src="src/assets/codegeass/6.png" height="40"> |
-| Death Note | `l` | <img src="src/assets/l/2.png" height="40"><img src="src/assets/l/0.png" height="40"><img src="src/assets/l/2.png" height="40"><img src="src/assets/l/6.png" height="40"> |
-| Monster | `monster` | <img src="src/assets/monster/2.png" height="40"><img src="src/assets/monster/0.png" height="40"><img src="src/assets/monster/2.png" height="40"><img src="src/assets/monster/6.png" height="40"> |
+| Pixel | `pixel` | <img src="docs/badges/pixel.svg" alt="Pixel"> &nbsp; <img src="docs/badges/pixel-pink.svg" alt="Pixel, pink"> |
+| LED | `led` | <img src="docs/badges/led.svg" alt="LED"> &nbsp; <img src="docs/badges/led-cyan.svg" alt="LED, cyan"> |
+| Odometer | `odometer` | <img src="docs/badges/odometer.svg" alt="Odometer"> |
+| Flip | `flip` | <img src="docs/badges/flip.svg" alt="Flip"> |
+
+```markdown
+![Visitor count](https://odo.<your-account>.workers.dev/@your-name?theme=led&length=5&color=00e5ff&bg=001018)
+```
+
+### Sprites
+
+One character per digit, served from R2.
+
+| Theme | `theme=` | Preview |
+| :--- | :--- | :--- |
 | Adventure Time | `adventuretime` | <img src="src/assets/adventuretime/2.png" height="40"><img src="src/assets/adventuretime/0.png" height="40"><img src="src/assets/adventuretime/2.png" height="40"><img src="src/assets/adventuretime/6.png" height="40"> |
 | Gumball | `gumball` | <img src="src/assets/gumball/2.png" height="40"><img src="src/assets/gumball/0.png" height="40"><img src="src/assets/gumball/2.png" height="40"><img src="src/assets/gumball/6.png" height="40"> |
 
@@ -133,11 +149,12 @@ npm run typecheck        # type-check with tsc
 ### How it works
 
 ```
-GET /@umt?theme=naruto
+GET /@umt?theme=led
    │
    ├─ badge/options.ts      validate the handle and every option
    ├─ counter/              add a visit in the handle's Durable Object (skipped for render=true or num=)
    ├─ badge/flat.ts         draw the flat pill, or
+   │  badge/glyph.ts        draw pixel / LED / odometer / flip digits, or
    │  badge/sprite.ts       lay out digit images loaded from R2 (cached in memory)
    └─ routes/badge.ts       return the SVG with no-store and CSP headers
 ```
@@ -150,9 +167,9 @@ src/
 ├── app.ts               Route table
 ├── env.ts               Cloudflare bindings
 ├── routes/              One handler per route: badge, themes, builder page
-├── badge/               Option parsing and the flat / sprite renderers
+├── badge/               Option parsing and the flat, glyph and sprite renderers
 ├── counter/             VisitCounter Durable Object and its client
-├── themes/catalog.ts    Sprite themes: ids, labels and cell sizes
+├── themes/catalog.ts    Every theme: ids, labels, default colors, cell sizes
 ├── ui/                  Builder page: markup, styles and browser script
 ├── lib/                 Escaping and other text helpers
 └── assets/              Sprite digit images, uploaded to R2

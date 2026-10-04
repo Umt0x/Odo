@@ -1,4 +1,5 @@
 import { renderFlatBadge } from '../badge/flat.js';
+import { renderGlyphBadge } from '../badge/glyph.js';
 import { parseBadgeRequest } from '../badge/options.js';
 import { renderSpriteBadge } from '../badge/sprite.js';
 import { ERROR_BADGE } from '../badge/svg.js';
@@ -37,10 +38,13 @@ export async function badgeRoute(c: AppContext): Promise<Response> {
 
   let svg: string;
   try {
+    const { style, scale } = request;
     svg =
-      request.style.kind === 'flat'
-        ? renderFlatBadge(count, request.style, request.scale)
-        : await renderSpriteBadge(count, request.style, request.scale, c.env?.SPRITES);
+      style.kind === 'flat'
+        ? renderFlatBadge(count, style, scale)
+        : style.kind === 'glyph'
+          ? renderGlyphBadge(count, style, scale)
+          : await renderSpriteBadge(count, style, scale, c.env?.SPRITES);
   } catch (err) {
     console.error(`Could not render badge for "${request.handle}":`, err);
     return svgResponse(ERROR_BADGE, { status: 500 });

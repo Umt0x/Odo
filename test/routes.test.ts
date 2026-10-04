@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { app } from '../src/app.js';
-import { SPRITE_THEMES } from '../src/themes/catalog.js';
+import { DIGIT_THEMES } from '../src/themes/catalog.js';
 import { badgeText } from './helpers.js';
 
 describe('GET /', () => {
@@ -12,7 +12,7 @@ describe('GET /', () => {
     const html = await res.text();
     expect(html).toContain('<title>Odo');
     expect(html).toContain('Umt');
-    for (const theme of SPRITE_THEMES) {
+    for (const theme of DIGIT_THEMES) {
       expect(html, theme.id).toContain(`name="theme" value="${theme.id}"`);
     }
   });
@@ -21,7 +21,7 @@ describe('GET /', () => {
 describe('GET /themes', () => {
   it('lists flat and every sprite theme', async () => {
     const { themes } = (await (await app.request('/themes')).json()) as { themes: { id: string }[] };
-    expect(themes.map((t) => t.id)).toEqual(['flat', ...SPRITE_THEMES.map((t) => t.id)]);
+    expect(themes.map((t) => t.id)).toEqual(['flat', ...DIGIT_THEMES.map((t) => t.id)]);
   });
 });
 
@@ -66,6 +66,14 @@ describe('GET /@:handle', () => {
     const svg = await res.text();
     expect(svg).not.toContain('<script');
     expect(svg).toContain('&lt;s');
+  });
+
+  it('draws code-based themes without any bucket', async () => {
+    const res = await app.request('/@glyph-user?theme=led&length=4&num=2026&color=00ff00');
+    expect(res.status).toBe(200);
+    const svg = await res.text();
+    expect(svg).toContain('fill="#00ff00"');
+    expect(svg).not.toContain('<image');
   });
 
   it('ignores paths without @', async () => {

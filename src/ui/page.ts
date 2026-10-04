@@ -1,6 +1,6 @@
 import { ANIMATIONS, DIGITS, FLAT_COLORS, MAX_HANDLE_LENGTH } from '../badge/options.js';
 import { escapeXml } from '../lib/text.js';
-import { SPRITE_THEMES } from '../themes/catalog.js';
+import { DIGIT_THEMES, type DigitTheme } from '../themes/catalog.js';
 import { clientScript } from './client.js';
 import { styles } from './styles.js';
 
@@ -37,18 +37,24 @@ function sampleBadgeUrl(themeId: string | null): string {
   return `/@sample?${params}`;
 }
 
-function styleOption(value: string, label: string, thumbnail: string, checked = false): string {
+/**
+ * One card in the style picker. `data-kind` tells the browser script which
+ * settings to show; drawn themes also carry their default colors.
+ */
+function styleOption(value: string, label: string, thumbnail: string, theme?: DigitTheme): string {
+  const kind = theme?.kind ?? 'flat';
+  const colors = theme?.kind === 'glyph' ? ` data-color="${theme.colors.foreground}" data-bg="${theme.colors.background}"` : '';
   return `
             <label class="style">
-              <input type="radio" name="theme" value="${escapeXml(value)}"${checked ? ' checked' : ''}>
+              <input type="radio" name="theme" value="${escapeXml(value)}" data-kind="${kind}"${colors}${kind === 'flat' ? ' checked' : ''}>
               <span class="style__thumb"><img src="${escapeXml(thumbnail)}" alt="" loading="lazy" decoding="async"></span>
               <span class="style__name">${escapeXml(label)}</span>
             </label>`;
 }
 
-function colorSwatch(name: string, label: string, value: string): string {
+function colorSwatch(name: string, label: string, value: string, onlyFor?: string): string {
   return `
-                <label class="swatch">
+                <label class="swatch"${onlyFor ? ` data-for="${onlyFor}"` : ''}>
                   <input type="color" name="${name}" value="${value}" aria-label="${label} color">
                   <span>${label}</span>
                 </label>`;
@@ -61,8 +67,8 @@ function animationOption(name: (typeof ANIMATIONS)[number]): string {
 
 export function renderHomePage(): string {
   const styleOptions = [
-    styleOption('flat', 'Flat', sampleBadgeUrl(null), true),
-    ...SPRITE_THEMES.map((theme) => styleOption(theme.id, theme.label, sampleBadgeUrl(theme.id))),
+    styleOption('flat', 'Flat', sampleBadgeUrl(null)),
+    ...DIGIT_THEMES.map((theme) => styleOption(theme.id, theme.label, sampleBadgeUrl(theme.id), theme)),
   ].join('');
 
   return `<!doctype html>
@@ -128,9 +134,9 @@ export function renderHomePage(): string {
             <span class="row__label">Icon<small>Up to two characters.</small></span>
             <input class="input" name="icon" maxlength="16" placeholder="e.g. 👀">
           </label>
-          <fieldset class="row" data-for="flat">
+          <fieldset class="row" data-for="flat glyph">
             <legend class="row__label">Colors</legend>
-            <div class="swatches">${colorSwatch('bg', 'Fill', FLAT_COLORS.background)}${colorSwatch('color', 'Text', FLAT_COLORS.foreground)}${colorSwatch('stroke', 'Border', FLAT_COLORS.border)}
+            <div class="swatches">${colorSwatch('bg', 'Fill', FLAT_COLORS.background)}${colorSwatch('color', 'Text', FLAT_COLORS.foreground)}${colorSwatch('stroke', 'Border', FLAT_COLORS.border, 'flat')}
             </div>
           </fieldset>
           <fieldset class="row" data-for="flat">
@@ -139,7 +145,7 @@ export function renderHomePage(): string {
             </div>
           </fieldset>
 
-          <div class="row" data-for="sprite">
+          <div class="row" data-for="sprite glyph">
             <span class="row__label" id="digits-label">Digits<small>Short counts are padded with zeros.</small></span>
             <div class="stepper" role="group" aria-labelledby="digits-label">
               <button type="button" data-step="-1" aria-label="Fewer digits">−</button>
