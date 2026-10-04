@@ -144,7 +144,8 @@ Design it on [the Spotify card builder](https://odo.umt0x.workers.dev/now-playin
 
 | Option | Description | Default |
 | :--- | :--- | :--- |
-| `style` | `card`, `compact` (one slim line) or `vinyl` (a record that spins while the song plays) | `card` |
+| `style` | One of the [card styles](#card-styles) below | `card` |
+| `mascot` | Character for the `mascot` style: `dragon`, `robot` or `alien`, optionally numbered like `dragon-3` | `dragon` |
 | `mode` | `dark` or `light` | `dark` |
 | `bg`, `color`, `accent` | Background, text and accent colors (hex without `#` or a CSS color name) | per mode, accent `1db954` |
 | `cover` | `0` hides the cover art | shown |
@@ -152,6 +153,24 @@ Design it on [the Spotify card builder](https://odo.umt0x.workers.dev/now-playin
 | `scale` | Display size multiplier, `0.1` – `10` | `1` |
 
 `/spotify/open` takes visitors straight to the song on the card.
+
+#### Card styles
+
+| `style=` | What it looks like |
+| :--- | :--- |
+| `card` | Cover, status, title, artist and a moving progress bar |
+| `compact` | One slim line: title · artist |
+| `vinyl` | A record that spins while the song plays, with the cover as its label |
+| `cassette` | A tape whose reels turn and wind as the song progresses |
+| `blur` | The cover, blurred, becomes the background — every song brings its own colors |
+| `terminal` | A shell window printing the song, with a blinking cursor |
+| `lcd` | A green pixel LCD; long titles scroll like a car stereo |
+| `polaroid` | A tilted instant photo of the cover with a handwritten caption (tall) |
+| `badge` | A two-part badge, `Spotify │ Title — Artist`, to sit next to other badges |
+| `equalizer` | Bars bounce across the card behind the song |
+| `mascot` | An Umt0x character next to a speech bubble with the song; notes float up |
+| `island` | A floating pill like a phone's dynamic island, with a live waveform |
+| `player` | Big cover, title block and a scrubber with elapsed and total time |
 
 Each Odo deployment shows **one** Spotify account: its owner's. Spotify only lets new apps sign in up to 25 hand-picked users, so the card is built for your own profile rather than as a shared service.
 
