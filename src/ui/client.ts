@@ -68,8 +68,12 @@ export const clientScript = String.raw`
       params.set('theme', theme);
       // The field is called "digits": form.elements.length is the number of controls.
       params.set('length', fields.digits.value);
-      setColor(params, 'color', fields.color);
-      setColor(params, 'bg', fields.bg);
+      if (kind === 'glyph') {
+        setColor(params, 'color', fields.color);
+        setColor(params, 'bg', fields.bg);
+      } else if (!fields.pixelated.checked) {
+        params.set('pixelated', '0');
+      }
     }
 
     var scale = parseFloat(fields.scale.value);

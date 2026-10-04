@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { renderFlatBadge } from '../src/badge/flat.js';
 import { renderGlyphBadge } from '../src/badge/glyph.js';
+import { readFileSync } from 'node:fs';
 import { FLAT_COLORS, type FlatStyle, type GlyphStyle } from '../src/badge/options.js';
-import { GLYPH_THEMES, findTheme } from '../src/themes/catalog.js';
+import { renderSpriteBadge } from '../src/badge/sprite.js';
+import { GLYPH_THEMES, SPRITE_THEMES, findTheme, type GlyphTheme } from '../src/themes/catalog.js';
 import { badgeText } from './helpers.js';
 
 const flat: FlatStyle = { kind: 'flat', ...FLAT_COLORS, icon: '', animation: 'none' };
@@ -28,7 +30,7 @@ describe('flat badge', () => {
 
 describe('glyph badges', () => {
   const glyph = (id: string, digits = 4): GlyphStyle => {
-    const theme = findTheme(id)!;
+    const theme = findTheme(id) as GlyphTheme;
     return { kind: 'glyph', theme, digits, ...theme.colors };
   };
 
@@ -59,5 +61,28 @@ describe('glyph badges', () => {
       const svg = renderGlyphBadge(2026, glyph(id), 1);
       expect(svg.match(/<text [^>]*>(\d)<\/text>/g)?.map((t) => t.replace(/<[^>]+>/g, '')).join('')).toBe('2026');
     }
+  });
+});
+
+describe('sprite badges', () => {
+  const [hatchling] = SPRITE_THEMES;
+
+  it('pads the count and uses each digit image', () => {
+    const svg = renderSpriteBadge(11, { kind: 'sprite', theme: hatchling, digits: 7, pixelated: true }, 1);
+    expect(svg.match(/<image /g)).toHaveLength(7);
+    expect(svg).toContain(`viewBox="0 0 ${hatchling.cell.width * 7} ${hatchling.cell.height}"`);
+    expect(new Set(svg.match(/href="[^"]+"/g)).size).toBe(2);
+  });
+
+  it.each(SPRITE_THEMES.map((t) => [t.id, t] as const))('%s cell fits its widest and tallest image', (id, theme) => {
+    const sizes = Array.from({ length: 10 }, (_, digit) => {
+      const png = readFileSync(new URL(`../src/assets/${id}/${digit}.png`, import.meta.url));
+      return [png.readUInt32BE(16), png.readUInt32BE(20)];
+    });
+    expect(theme.images).toHaveLength(10);
+    expect(theme.cell).toEqual({
+      width: Math.max(...sizes.map(([w]) => w)),
+      height: Math.max(...sizes.map(([, h]) => h)),
+    });
   });
 });

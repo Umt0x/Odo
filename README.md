@@ -4,7 +4,7 @@
 
 **Visitor counter badges for your GitHub profile and website.**
 
-Flat pills or retro digit styles, counted atomically on Cloudflare's edge — and free to host.
+Flat pills, retro digit styles or baby dragons, counted atomically on Cloudflare's edge — and free to host.
 
 <br>
 
@@ -20,6 +20,10 @@ Flat pills or retro digit styles, counted atomically on Cloudflare's edge — an
 <img src="docs/badges/led.svg" alt="LED" height="28"> &nbsp;
 <img src="docs/badges/odometer.svg" alt="Odometer" height="28"> &nbsp;
 <img src="docs/badges/flip.svg" alt="Flip" height="28">
+
+<br><br>
+
+<img src="src/assets/hatchling/2.png" height="72" alt="2"><img src="src/assets/hatchling/0.png" height="72" alt="0"><img src="src/assets/hatchling/2.png" height="72" alt="2"><img src="src/assets/hatchling/6.png" height="72" alt="6">
 
 <br><br>
 
@@ -42,7 +46,7 @@ Flat pills or retro digit styles, counted atomically on Cloudflare's edge — an
 
 - **One line to add.** Paste a Markdown image into your README and you're done.
 - **Accurate.** Every handle gets its own Durable Object, so simultaneous visits are never lost.
-- **Five looks.** A minimal flat pill and four digit styles — pixel, LED, odometer and flip — all drawn in code and fully recolorable.
+- **Six looks.** A minimal flat pill, four recolorable digit styles drawn in code — pixel, LED, odometer and flip — and the Hatchlings, ten baby dragons that each hold up a digit.
 - **Builder included.** Design your badge on [the builder](https://odo.umt0x.workers.dev) and see it in a GitHub-style preview, light or dark.
 - **Safe to embed.** Every input is validated, and badges are served with a strict Content-Security-Policy.
 - **Free.** The Workers Free plan covers roughly 100k badge views a day.
@@ -89,14 +93,17 @@ Large numbers are shortened automatically: `1337` → `1.3K`, `1250000` → `1.3
 | Option | Description | Default |
 | :--- | :--- | :--- |
 | `length` | Minimum number of digits, `1` – `16`; shorter counts are padded with zeros | `7` |
-| `color` | Digit color | per theme |
-| `bg` | Background color, or `transparent` | per theme |
+| `color` | Digit color — drawn themes only | per theme |
+| `bg` | Background color, or `transparent` — drawn themes only | per theme |
+| `pixelated` | `0` turns off crisp scaling — Hatchlings only | on |
 
 ## Themes
 
 The list is also available as JSON at `/themes`.
 
-Every theme is drawn in code: it stays sharp at any size and takes any colors via `color` and `bg`.
+### Drawn
+
+Drawn in code: they stay sharp at any size and take any colors via `color` and `bg`.
 
 | Theme | `theme=` | Preview |
 | :--- | :--- | :--- |
@@ -107,6 +114,18 @@ Every theme is drawn in code: it stays sharp at any size and takes any colors vi
 
 ```markdown
 ![Visitor count](https://odo.umt0x.workers.dev/@your-name?theme=led&length=5&color=00e5ff&bg=001018)
+```
+
+### Hatchlings
+
+Ten baby dragons — shadow, bone, panda, tabby, sand, lavender, forest, fire, ice and coral — each holding up its own digit.
+
+| Theme | `theme=` | Preview |
+| :--- | :--- | :--- |
+| Hatchlings | `hatchling` | <img src="src/assets/hatchling/0.png" height="54"><img src="src/assets/hatchling/1.png" height="54"><img src="src/assets/hatchling/2.png" height="54"><img src="src/assets/hatchling/3.png" height="54"><img src="src/assets/hatchling/4.png" height="54"><img src="src/assets/hatchling/5.png" height="54"><img src="src/assets/hatchling/6.png" height="54"><img src="src/assets/hatchling/7.png" height="54"><img src="src/assets/hatchling/8.png" height="54"><img src="src/assets/hatchling/9.png" height="54"> |
+
+```markdown
+![Visitor count](https://odo.umt0x.workers.dev/@your-name?theme=hatchling&length=5)
 ```
 
 ## Self-hosting
@@ -142,7 +161,8 @@ GET /@umt?theme=led
    ├─ badge/options.ts      validate the handle and every option
    ├─ counter/              add a visit in the handle's Durable Object (skipped for render=true or num=)
    ├─ badge/flat.ts         draw the flat pill, or
-   │  badge/glyph.ts        draw pixel / LED / odometer / flip digits
+   │  badge/glyph.ts        draw pixel / LED / odometer / flip digits, or
+   │  badge/sprite.ts       lay out the Hatchlings images bundled with the worker
    └─ routes/badge.ts       return the SVG with no-store and CSP headers
 ```
 
@@ -154,19 +174,21 @@ src/
 ├── app.ts               Route table
 ├── env.ts               Cloudflare bindings
 ├── routes/              One handler per route: badge, themes, builder page
-├── badge/               Option parsing and the flat / digit renderers
+├── badge/               Option parsing and the flat, drawn and sprite renderers
 ├── counter/             VisitCounter Durable Object and its client
-├── themes/catalog.ts    Every theme: ids, labels and default colors
+├── themes/catalog.ts    Every theme: ids, labels, colors and image sets
 ├── ui/                  Builder page: markup, styles and browser script
-└── lib/                 Escaping and other text helpers
+├── lib/                 Escaping and other text helpers
+└── assets/              Sprite images (bundled into the worker)
 test/                    Vitest suites
 ```
 
 ### Adding a theme
 
-1. Add a drawing function to `src/badge/glyph.ts` that turns a list of digits into SVG.
-2. Register it in `DRAWERS` there and in `src/themes/catalog.ts` with a label and default colors.
-3. `npm test` checks that every theme renders.
+- **Drawn:** add a drawing function to `src/badge/glyph.ts`, register it in `DRAWERS` and in `src/themes/catalog.ts` with a label and default colors.
+- **Images:** put `0.png` … `9.png` in `src/assets/<id>/` with an `index.ts` like `hatchling`'s, and register the set in `src/themes/catalog.ts`. Keep each image small (around 10 KB): every digit is embedded in the badge.
+
+`npm test` checks that every theme renders and that image cell sizes match the files.
 
 ## License
 

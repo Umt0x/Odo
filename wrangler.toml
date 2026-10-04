@@ -11,3 +11,9 @@ class_name = "VisitCounter"
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["VisitCounter"]
+
+# Sprite images ship inside the worker as binary data
+[[rules]]
+type = "Data"
+globs = ["**/*.png"]
+fallthrough = false

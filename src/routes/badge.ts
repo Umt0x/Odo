@@ -1,5 +1,6 @@
 import { renderFlatBadge } from '../badge/flat.js';
 import { renderGlyphBadge } from '../badge/glyph.js';
+import { renderSpriteBadge } from '../badge/sprite.js';
 import { parseBadgeRequest } from '../badge/options.js';
 import { ERROR_BADGE } from '../badge/svg.js';
 import { countVisit } from '../counter/counter-client.js';
@@ -39,7 +40,11 @@ export async function badgeRoute(c: AppContext): Promise<Response> {
   try {
     const { style, scale } = request;
     svg =
-      style.kind === 'flat' ? renderFlatBadge(count, style, scale) : renderGlyphBadge(count, style, scale);
+      style.kind === 'flat'
+        ? renderFlatBadge(count, style, scale)
+        : style.kind === 'glyph'
+          ? renderGlyphBadge(count, style, scale)
+          : renderSpriteBadge(count, style, scale);
   } catch (err) {
     console.error(`Could not render badge for "${request.handle}":`, err);
     return svgResponse(ERROR_BADGE, { status: 500 });

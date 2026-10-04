@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { app } from '../src/app.js';
-import { GLYPH_THEMES } from '../src/themes/catalog.js';
+import { DIGIT_THEMES } from '../src/themes/catalog.js';
 import { badgeText } from './helpers.js';
 
 describe('GET /', () => {
@@ -12,7 +12,7 @@ describe('GET /', () => {
     const html = await res.text();
     expect(html).toContain('<title>Odo');
     expect(html).toContain('Umt');
-    for (const theme of GLYPH_THEMES) {
+    for (const theme of DIGIT_THEMES) {
       expect(html, theme.id).toContain(`name="theme" value="${theme.id}"`);
     }
   });
@@ -21,7 +21,7 @@ describe('GET /', () => {
 describe('GET /themes', () => {
   it('lists flat and every theme', async () => {
     const { themes } = (await (await app.request('/themes')).json()) as { themes: { id: string }[] };
-    expect(themes.map((t) => t.id)).toEqual(['flat', ...GLYPH_THEMES.map((t) => t.id)]);
+    expect(themes.map((t) => t.id)).toEqual(['flat', ...DIGIT_THEMES.map((t) => t.id)]);
   });
 });
 
@@ -74,6 +74,12 @@ describe('GET /@:handle', () => {
     const svg = await res.text();
     expect(svg).toContain('fill="#00ff00"');
     expect(svg).not.toContain('<image');
+  });
+
+  it('serves sprite themes from bundled images', async () => {
+    const svg = await (await app.request('/@sprite-user?theme=hatchling&length=4&num=2026')).text();
+    expect(svg.match(/<image /g)).toHaveLength(4);
+    expect(svg).toContain('href="data:image/png;base64,');
   });
 
   it('ignores paths without @', async () => {
