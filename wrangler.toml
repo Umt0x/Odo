@@ -24,7 +24,7 @@ new_sqlite_classes = ["SpotifyAccount"]
 # Client ID from developer.spotify.com/dashboard (not secret). The client secret
 # goes in with `npx wrangler secret put SPOTIFY_CLIENT_SECRET`.
 [vars]
-SPOTIFY_CLIENT_ID = ""
+SPOTIFY_CLIENT_ID = "6f520d644a5c44fb967ff8982a2e0159"
 
 # Sprite images ship inside the worker as binary data
 [[rules]]
