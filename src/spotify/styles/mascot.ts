@@ -1,29 +1,26 @@
+import listening from '../../assets/listening/index.js';
 import { dataUri } from '../../badge/sprite.js';
 import { svgDocument } from '../../badge/svg.js';
-import { findTheme } from '../../themes/catalog.js';
-import { clip, equalizer, hasTrack, isPlaying, MESSAGES, STATUS, stylesheet, type CardOptions, type Renderer } from '../card-kit.js';
+import { clip, equalizer, hasTrack, isPlaying, MESSAGES, STATUS, stylesheet, type Renderer } from '../card-kit.js';
 
-/** The mascot sets are the Umt0x character themes. */
-const SETS: Record<CardOptions['mascot']['set'], string> = {
-  dragon: 'first-ten',
-  robot: 'first-boot',
-  alien: 'aliens',
-};
+/** PNG width and height sit at bytes 16-23 of the header. */
+function pngSize(image: ArrayBuffer): { width: number; height: number } {
+  const header = new DataView(image);
+  return { width: header.getUint32(16), height: header.getUint32(20) };
+}
 
-/** One of the Umt0x characters sits next to a speech bubble with the song; notes float up while it plays. */
+/** An Umt0x character with headphones sits next to a speech bubble with the song; notes float up while it plays. */
 export const renderMascot: Renderer = (now, o) => {
   const width = 420;
   const height = 140;
-  const theme = findTheme(SETS[o.mascot.set]);
   const playing = isPlaying(now);
 
-  let character = '';
-  let characterWidth = 90;
-  if (theme?.kind === 'sprite') {
-    const h = 122;
-    characterWidth = Math.round((theme.cell.width / theme.cell.height) * h);
-    character = `<image x="14" y="${height - h - 6}" width="${characterWidth}" height="${h}" href="${dataUri(theme.images[o.mascot.digit])}" style="image-rendering:pixelated"/>`;
-  }
+  // The images are stored at twice this height, so they stay sharp on high-density screens.
+  const image = listening[o.mascot];
+  const size = pngSize(image);
+  const h = 122;
+  const characterWidth = Math.round((size.width / size.height) * h);
+  const character = `<image x="14" y="${height - h - 6}" width="${characterWidth}" height="${h}" href="${dataUri(image)}"/>`;
 
   const notes = playing
     ? ['♪', '♫', '♪']

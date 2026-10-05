@@ -11,9 +11,12 @@ export interface CardOptions {
   showCover: boolean;
   showProgress: boolean;
   scale: number;
-  /** Which Umt0x character the mascot style shows, e.g. `{ set: 'dragon', digit: 7 }`. */
-  mascot: { set: 'dragon' | 'robot' | 'alien'; digit: number };
+  /** Which Umt0x listening character the mascot style shows. */
+  mascot: Mascot;
 }
+
+export const MASCOTS = ['dragon', 'robot', 'alien', 'cat', 'spirit', 'cup', 'monster'] as const;
+export type Mascot = (typeof MASCOTS)[number];
 
 export type Track = Extract<NowPlaying, { title: string }>;
 export type Renderer = (now: NowPlaying, o: CardOptions) => string;

@@ -4,7 +4,7 @@
 
 **Visitor counter badges for your GitHub profile and website.**
 
-Flat pills, retro digit styles, or dragons, robots and aliens holding up your numbers — counted atomically on Cloudflare's edge and free to host.
+Flat pills, retro digit styles, or a whole cast of pixel characters holding up your numbers — counted atomically on Cloudflare's edge and free to host.
 
 <br>
 
@@ -46,7 +46,7 @@ Flat pills, retro digit styles, or dragons, robots and aliens holding up your nu
 
 - **One line to add.** Paste a Markdown image into your README and you're done.
 - **Accurate.** Every handle gets its own Durable Object, so simultaneous visits are never lost.
-- **Eight looks.** A minimal flat pill, four recolorable digit styles drawn in code — pixel, LED, odometer and flip — and three original character sets: baby dragons, robots and aliens.
+- **Lots of looks.** A minimal flat pill, four recolorable digit styles drawn in code — pixel, LED, odometer and flip — and seven original Umt0x character sets — dragons, robots, aliens, element cats, forest spirits, living objects and pocket monsters.
 - **Builders included.** Design your badge or Spotify card on the site and see it in a GitHub-style preview, light or dark.
 - **18 languages.** The site follows your browser's language, with a picker in the footer.
 - **Spotify card.** Show what you're listening to right now, with cover art and a live progress bar.
@@ -127,6 +127,10 @@ Original pixel-art sets by Umt0x: every digit is its own character holding up it
 | Umt0x: The First Ten | `first-ten` | <img src="src/assets/umt0x-th-first-ten/0.png" height="54"><img src="src/assets/umt0x-th-first-ten/1.png" height="54"><img src="src/assets/umt0x-th-first-ten/2.png" height="54"><img src="src/assets/umt0x-th-first-ten/3.png" height="54"><img src="src/assets/umt0x-th-first-ten/4.png" height="54"><img src="src/assets/umt0x-th-first-ten/5.png" height="54"><img src="src/assets/umt0x-th-first-ten/6.png" height="54"><img src="src/assets/umt0x-th-first-ten/7.png" height="54"><img src="src/assets/umt0x-th-first-ten/8.png" height="54"><img src="src/assets/umt0x-th-first-ten/9.png" height="54"> |
 | Umt0x: First Boot | `first-boot` | <img src="src/assets/umt0x-first-boot/0.png" height="54"><img src="src/assets/umt0x-first-boot/1.png" height="54"><img src="src/assets/umt0x-first-boot/2.png" height="54"><img src="src/assets/umt0x-first-boot/3.png" height="54"><img src="src/assets/umt0x-first-boot/4.png" height="54"><img src="src/assets/umt0x-first-boot/5.png" height="54"><img src="src/assets/umt0x-first-boot/6.png" height="54"><img src="src/assets/umt0x-first-boot/7.png" height="54"><img src="src/assets/umt0x-first-boot/8.png" height="54"><img src="src/assets/umt0x-first-boot/9.png" height="54"> |
 | Umt0x: Aliens | `aliens` | <img src="src/assets/umt0x-aliens-0-9/0.png" height="54"><img src="src/assets/umt0x-aliens-0-9/1.png" height="54"><img src="src/assets/umt0x-aliens-0-9/2.png" height="54"><img src="src/assets/umt0x-aliens-0-9/3.png" height="54"><img src="src/assets/umt0x-aliens-0-9/4.png" height="54"><img src="src/assets/umt0x-aliens-0-9/5.png" height="54"><img src="src/assets/umt0x-aliens-0-9/6.png" height="54"><img src="src/assets/umt0x-aliens-0-9/7.png" height="54"><img src="src/assets/umt0x-aliens-0-9/8.png" height="54"><img src="src/assets/umt0x-aliens-0-9/9.png" height="54"> |
+| Umt0x: Element Cats | `element-cats` | <img src="src/assets/umt0x-element-cats/0.png" height="54"><img src="src/assets/umt0x-element-cats/1.png" height="54"><img src="src/assets/umt0x-element-cats/2.png" height="54"><img src="src/assets/umt0x-element-cats/3.png" height="54"><img src="src/assets/umt0x-element-cats/4.png" height="54"><img src="src/assets/umt0x-element-cats/5.png" height="54"><img src="src/assets/umt0x-element-cats/6.png" height="54"><img src="src/assets/umt0x-element-cats/7.png" height="54"><img src="src/assets/umt0x-element-cats/8.png" height="54"><img src="src/assets/umt0x-element-cats/9.png" height="54"> |
+| Umt0x: Forest Spirits | `forest-spirits` | <img src="src/assets/umt0x-forest-spirits/0.png" height="54"><img src="src/assets/umt0x-forest-spirits/1.png" height="54"><img src="src/assets/umt0x-forest-spirits/2.png" height="54"><img src="src/assets/umt0x-forest-spirits/3.png" height="54"><img src="src/assets/umt0x-forest-spirits/4.png" height="54"><img src="src/assets/umt0x-forest-spirits/5.png" height="54"><img src="src/assets/umt0x-forest-spirits/6.png" height="54"><img src="src/assets/umt0x-forest-spirits/7.png" height="54"><img src="src/assets/umt0x-forest-spirits/8.png" height="54"><img src="src/assets/umt0x-forest-spirits/9.png" height="54"> |
+| Umt0x: Living Objects | `living-objects` | <img src="src/assets/umt0x-living-objects/0.png" height="54"><img src="src/assets/umt0x-living-objects/1.png" height="54"><img src="src/assets/umt0x-living-objects/2.png" height="54"><img src="src/assets/umt0x-living-objects/3.png" height="54"><img src="src/assets/umt0x-living-objects/4.png" height="54"><img src="src/assets/umt0x-living-objects/5.png" height="54"><img src="src/assets/umt0x-living-objects/6.png" height="54"><img src="src/assets/umt0x-living-objects/7.png" height="54"><img src="src/assets/umt0x-living-objects/8.png" height="54"><img src="src/assets/umt0x-living-objects/9.png" height="54"> |
+| Umt0x: Pocket Monsters | `pocket-monsters` | <img src="src/assets/umt0x-pocket-monsters/0.png" height="54"><img src="src/assets/umt0x-pocket-monsters/1.png" height="54"><img src="src/assets/umt0x-pocket-monsters/2.png" height="54"><img src="src/assets/umt0x-pocket-monsters/3.png" height="54"><img src="src/assets/umt0x-pocket-monsters/4.png" height="54"><img src="src/assets/umt0x-pocket-monsters/5.png" height="54"><img src="src/assets/umt0x-pocket-monsters/6.png" height="54"><img src="src/assets/umt0x-pocket-monsters/7.png" height="54"><img src="src/assets/umt0x-pocket-monsters/8.png" height="54"><img src="src/assets/umt0x-pocket-monsters/9.png" height="54"> |
 
 ```markdown
 ![Visitor count](https://odo.umt0x.workers.dev/@your-name?theme=first-ten&length=5)
@@ -145,7 +149,7 @@ Design it on [the Spotify card builder](https://odo.umt0x.workers.dev/now-playin
 | Option | Description | Default |
 | :--- | :--- | :--- |
 | `style` | One of the [card styles](#card-styles) below | `card` |
-| `mascot` | Character for the `mascot` style: `dragon`, `robot` or `alien`, optionally numbered like `dragon-3` | `dragon` |
+| `mascot` | Listening character for the `mascot` style: `dragon`, `robot`, `alien`, `cat`, `spirit`, `cup` or `monster` | `dragon` |
 | `mode` | `dark` or `light` | `dark` |
 | `bg`, `color`, `accent` | Background, text and accent colors (hex without `#` or a CSS color name) | per mode, accent `1db954` |
 | `cover` | `0` hides the cover art | shown |
@@ -168,7 +172,7 @@ Design it on [the Spotify card builder](https://odo.umt0x.workers.dev/now-playin
 | `polaroid` | A tilted instant photo of the cover with a handwritten caption (tall) |
 | `badge` | A two-part badge, `Spotify │ Title — Artist`, to sit next to other badges |
 | `equalizer` | Bars bounce across the card behind the song |
-| `mascot` | An Umt0x character next to a speech bubble with the song; notes float up |
+| `mascot` | An Umt0x character with headphones next to a speech bubble with the song; notes float up |
 | `island` | A floating pill like a phone's dynamic island, with a live waveform |
 | `player` | Big cover, title block and a scrubber with elapsed and total time |
 

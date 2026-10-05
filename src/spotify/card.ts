@@ -1,5 +1,5 @@
 import { safeColor } from '../lib/text.js';
-import type { CardOptions, Renderer } from './card-kit.js';
+import { MASCOTS, type CardOptions, type Mascot, type Renderer } from './card-kit.js';
 import type { NowPlaying } from './spotify-account.js';
 import { renderCard, renderCompact, renderVinyl } from './styles/classic.js';
 import { renderMascot } from './styles/mascot.js';
@@ -8,6 +8,7 @@ import { renderBlur, renderPlayer, renderPolaroid } from './styles/photo.js';
 import { renderCassette, renderLcd, renderTerminal } from './styles/retro.js';
 
 export type { CardOptions } from './card-kit.js';
+export { MASCOTS } from './card-kit.js';
 
 /** Every card style, in the order the builder shows them. */
 const RENDERERS = {
@@ -37,16 +38,15 @@ export const CARD_PRESETS = {
   light: { background: '#ffffff', foreground: '#0a0a0a' },
 } as const;
 
-export const MASCOTS = ['dragon', 'robot', 'alien'] as const;
-const DEFAULT_MASCOT_DIGIT: Record<(typeof MASCOTS)[number], number> = { dragon: 7, robot: 1, alien: 4 };
-
 type Query = (name: string) => string | undefined;
 
-/** `mascot=dragon`, `robot` or `alien`, optionally with a character number: `dragon-3`. */
-function parseMascot(value: string | undefined): CardOptions['mascot'] {
-  const match = /^(dragon|robot|alien)(?:-([0-9]))?$/.exec(value ?? '');
-  const set = (match?.[1] as CardOptions['mascot']['set'] | undefined) ?? 'dragon';
-  return { set, digit: match?.[2] ? Number(match[2]) : DEFAULT_MASCOT_DIGIT[set] };
+/**
+ * `mascot=` one of MASCOTS. Older links may carry a character number
+ * (`dragon-3`); there is one listening character per set now, so it is ignored.
+ */
+function parseMascot(value: string | undefined): Mascot {
+  const name = (value ?? '').replace(/-[0-9]$/, '');
+  return MASCOTS.find((mascot) => mascot === name) ?? 'dragon';
 }
 
 export function parseCardOptions(query: Query): CardOptions {

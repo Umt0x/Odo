@@ -1,6 +1,10 @@
 import aliensDigits from '../assets/umt0x-aliens-0-9/index.js';
+import elementCatsDigits from '../assets/umt0x-element-cats/index.js';
 import firstBootDigits from '../assets/umt0x-first-boot/index.js';
 import firstTenDigits from '../assets/umt0x-th-first-ten/index.js';
+import forestSpiritsDigits from '../assets/umt0x-forest-spirits/index.js';
+import livingObjectsDigits from '../assets/umt0x-living-objects/index.js';
+import pocketMonstersDigits from '../assets/umt0x-pocket-monsters/index.js';
 
 export type GlyphId = 'pixel' | 'led' | 'odometer' | 'flip';
 
@@ -41,6 +45,10 @@ export const SPRITE_THEMES: readonly SpriteTheme[] = [
   { kind: 'sprite', id: 'first-ten', label: 'The First Ten', cell: { width: 125, height: 180 }, images: firstTenDigits },
   { kind: 'sprite', id: 'first-boot', label: 'First Boot', cell: { width: 133, height: 180 }, images: firstBootDigits },
   { kind: 'sprite', id: 'aliens', label: 'Aliens', cell: { width: 135, height: 180 }, images: aliensDigits },
+  { kind: 'sprite', id: 'element-cats', label: 'Element Cats', cell: { width: 127, height: 180 }, images: elementCatsDigits },
+  { kind: 'sprite', id: 'forest-spirits', label: 'Forest Spirits', cell: { width: 133, height: 180 }, images: forestSpiritsDigits },
+  { kind: 'sprite', id: 'living-objects', label: 'Living Objects', cell: { width: 132, height: 180 }, images: livingObjectsDigits },
+  { kind: 'sprite', id: 'pocket-monsters', label: 'Pocket Monsters', cell: { width: 137, height: 180 }, images: pocketMonstersDigits },
 ];
 
 /** Every value the `theme` parameter accepts besides `flat`, in the order the builder shows them. */

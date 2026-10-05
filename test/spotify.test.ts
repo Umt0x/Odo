@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { app } from '../src/app.js';
 import { toPixelText } from '../src/lib/pixel-font.js';
-import { CARD_STYLES, parseCardOptions, renderSpotifyCard } from '../src/spotify/card.js';
+import { CARD_STYLES, MASCOTS, parseCardOptions, renderSpotifyCard } from '../src/spotify/card.js';
 import { SpotifyAccount, type NowPlaying } from '../src/spotify/spotify-account.js';
 import { fakeDurableState } from './helpers.js';
 
@@ -215,11 +215,18 @@ describe('every card style', () => {
     }
   });
 
-  it('picks the mascot character from the query', () => {
-    expect(parseCardOptions(() => undefined).mascot).toEqual({ set: 'dragon', digit: 7 });
-    expect(parseCardOptions((name) => (name === 'mascot' ? 'robot' : undefined)).mascot).toEqual({ set: 'robot', digit: 1 });
-    expect(parseCardOptions((name) => (name === 'mascot' ? 'alien-9' : undefined)).mascot).toEqual({ set: 'alien', digit: 9 });
-    expect(parseCardOptions((name) => (name === 'mascot' ? 'cat-3' : undefined)).mascot).toEqual({ set: 'dragon', digit: 7 });
+  it('picks the listening character from the query', () => {
+    const mascot = (value?: string) => parseCardOptions((name) => (name === 'mascot' ? value : undefined)).mascot;
+    expect(mascot()).toBe('dragon');
+    for (const name of MASCOTS) expect(mascot(name)).toBe(name);
+    // Links from before the listening pack carried a character number.
+    expect(mascot('robot-1')).toBe('robot');
+    expect(mascot('nope')).toBe('dragon');
+  });
+
+  it.each(MASCOTS)('draws the %s mascot', (name) => {
+    const options = parseCardOptions((key) => ({ style: 'mascot', mascot: name } as Record<string, string>)[key]);
+    expect(renderSpotifyCard(track, options)).toContain('href="data:image/png;base64,');
   });
 
   it('maps any text onto the LCD pixel font', () => {
